@@ -1,0 +1,15 @@
+= Installing {{ cookiecutter.tool_name }}
+
+== Stable Version *(recommended)*
+
+[source,bash]
+----
+python3.5 -m pip install {{ cookiecutter.tool_name_slug }}
+----
+
+== Development Version
+
+[source,bash]
+----
+python3.5 -m pip install https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}/archive/develop.zip
+----

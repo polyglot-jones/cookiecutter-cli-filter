@@ -1,0 +1,6 @@
+= {{ cookiecutter.tool_name }} Change Log
+
+== Recent Changes
+
+(See the git repo.)
+

@@ -1,0 +1,5 @@
+= Getting Started
+
+{{ cookiecutter.tool_name }}
+
+(TBD)

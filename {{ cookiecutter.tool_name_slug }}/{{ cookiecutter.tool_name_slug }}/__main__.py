@@ -1,25 +1,31 @@
+import os, sys, logging
+
 def main(args):
     """Main entry point allowing external calls
 
     Args:
       args ([str]): command line parameter list
     """
-    import os, sys
-    import .core.command_line
+    from sys import stdin, stdout, stderr
+    from .core.command_line import parse_args
+    from .util.logger import setup_logging
+    from .logic import filter_one
 
     parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     sys.path.insert(1, parent_dir)
     import {{ cookiecutter.tool_name_slug }}
 
     __package__ = str("{{ cookiecutter.tool_name_slug }}")
+    LOG = logging.getLogger(__package__.split('.', maxsplit=1)[0])
 
-    SWITCHES = core.command_line.parse_args(args)
-    setup_logging(args.loglevel)
+
+    SWITCHES = parse_args(args)
+    setup_logging(SWITCHES.loglevel)
     LOG.trace("Starting job...")
     LOG.debug("SWITCHES.loglevel = {}".format(SWITCHES.loglevel))
     if (SWITCHES.devmode):
         LOG.info("Running in dev mode.")
-    stdout << main_filter << stdin
+    stdout << filter_one() << stdin
     LOG.trace("Script ending.")
 
 

@@ -1,5 +1,5 @@
 {
-  "tool_name": "sample",
+  "tool_name": "My Tool",
   "tool_name_slug": "{{ cookiecutter.tool_name.lower() | replace(' ', '_') | replace('-', '_') }}",
   "brief_description": "Brief description",
   "long_description": "{{ cookiecutter.brief_description }}",

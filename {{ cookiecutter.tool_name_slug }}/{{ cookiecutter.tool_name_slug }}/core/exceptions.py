@@ -41,7 +41,7 @@ class {{ cookiecutter.tool_name_camel_case }}ValueError(ValueError):
 class {{ cookiecutter.tool_name_camel_case }}TypeError(TypeError):
     exitcode = EX_SOFTWARE
 
-class {{ cookiecutter.tool_name_camel_case }}ConfigError({{ cookiecutter.tool_name_camel_case }}ConfigError):
+class {{ cookiecutter.tool_name_camel_case }}ConfigError({{ cookiecutter.tool_name_camel_case }}Error):
     """
     Exception raised because of bad data in a config file or something wrong with our operating environment.
 
@@ -55,6 +55,7 @@ class {{ cookiecutter.tool_name_camel_case }}ConfigError({{ cookiecutter.tool_na
     """
     exitcode = EX_CONFIG
 
+    @overload
     def __init__(self, message):
         self.message = message
 
@@ -66,6 +67,6 @@ class {{ cookiecutter.tool_name_camel_case }}ConfigError({{ cookiecutter.tool_na
 
 
 __all__ = ("{{ cookiecutter.tool_name_camel_case }}Error", 
-	"{{ cookiecutter.tool_name_camel_case }}ValueError", 
-	"{{ cookiecutter.tool_name_camel_case }}TypeError",
-	"{{ cookiecutter.tool_name_camel_case }}ConfigError")
+    "{{ cookiecutter.tool_name_camel_case }}ValueError", 
+    "{{ cookiecutter.tool_name_camel_case }}TypeError",
+    "{{ cookiecutter.tool_name_camel_case }}ConfigError")

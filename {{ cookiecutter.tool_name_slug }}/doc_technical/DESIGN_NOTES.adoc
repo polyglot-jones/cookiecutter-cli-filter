@@ -1,4 +1,4 @@
-= Notes on how {{ cookiecutter.tool_name }} was designed and coded
+= Notes on How {{ cookiecutter.tool_name }} was Designed and Coded
 
 (TBD)
 

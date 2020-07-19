@@ -2,8 +2,6 @@
 
 [width="100%",cols="",options="header"]
 |===
-|
-|===
 {%- if cookiecutter.github_repo and cookiecutter.github_user %}
 | Project site    | http://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }} |
 | Author          | {{ cookiecutter.author }} |

@@ -2,10 +2,11 @@ import configparser, shutil, os, logging
 from pathlib import Path
 
 from dataclasses import dataclass
+from .exceptions import *
 from ..logic.settings import Settings as LogicSettings
 from ..util.config_helpers import asPath
 
-LOG = logging.getLogger("{{ cookiecutter.tool_name }}")
+LOG = logging.getLogger("{{ cookiecutter.tool_name_slug }}")
 
 
 @dataclass

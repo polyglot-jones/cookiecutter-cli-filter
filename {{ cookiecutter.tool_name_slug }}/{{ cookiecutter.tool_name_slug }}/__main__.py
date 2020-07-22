@@ -16,16 +16,15 @@ def main(args):
     import {{ cookiecutter.tool_name_slug }}
 
     __package__ = str("{{ cookiecutter.tool_name_slug }}")
-    LOG = logging.getLogger(__package__.split('.', maxsplit=1)[0])
-
+    LOG = logging.getLogger("{{ cookiecutter.tool_name_slug }}")
 
     SWITCHES = parse_args(args)
     setup_logging(SWITCHES.loglevel)
     LOG.trace("Starting job...")
-    LOG.debug("SWITCHES.loglevel = {}".format(SWITCHES.loglevel))
+    LOG.debug("SWITCHES.loglevel = %s" % SWITCHES.loglevel)
     if (SWITCHES.devmode):
         LOG.info("Running in dev mode.")
-    stdout << filter_one() << stdin
+    filter_one_go()
     LOG.trace("Script ending.")
 
 

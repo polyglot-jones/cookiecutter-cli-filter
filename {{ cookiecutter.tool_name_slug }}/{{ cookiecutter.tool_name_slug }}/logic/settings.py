@@ -3,7 +3,7 @@ from dataclasses import dataclass
 
 @dataclass
 class Settings:
-    last_action: str = None
+    last_action: str = ""
 
     def setParsedOptions(self, parser, issues):
         if parser.has_section('actions'):

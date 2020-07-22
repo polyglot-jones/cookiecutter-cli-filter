@@ -1,4 +1,5 @@
-from {{ cookiecutter.tool_name_slug }}.core.logger import setup_logging
+import pytest
+from ..{{ cookiecutter.tool_name_slug }}.util.logger import setup_logging
 
 
 def test_setup_logging_good_name():

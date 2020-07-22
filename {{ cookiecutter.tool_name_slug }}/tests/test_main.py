@@ -1,6 +1,6 @@
 import sys, io
-
-from {{ cookiecutter.tool_name_slug }}.__main__ import main
+import pytest
+from ..{{ cookiecutter.tool_name_slug }}.__main__ import main
 
 
 def test_{{ cookiecutter.tool_name_slug }}___main__good():
@@ -10,7 +10,7 @@ def test_{{ cookiecutter.tool_name_slug }}___main__good():
         sys.stderr = fake_stderr
 
         with pytest.raises(SystemExit) as e:
-            main()
+            main(sys.argv)
             assert str(e.value) == '0'
             assert 'Usage: info [OPTIONS] ' in sys.stderr.getvalue()
         sys.stderr = orig_stderr

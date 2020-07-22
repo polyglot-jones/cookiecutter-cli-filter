@@ -6,5 +6,6 @@ Don't be surprised if we move some/all of this code to an external library at so
 IMPORTANT: The code in this package must not be dependent on any code in the other packages.
 Dependencies should only go one-way.
 """
+from .logger import *
 
-setup_logging("{{ cookiecutter.tool_name }}")
+setup_logging("{{ cookiecutter.tool_name_slug }}")

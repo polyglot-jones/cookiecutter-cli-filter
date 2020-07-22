@@ -1,12 +1,13 @@
 import configparser, shutil, os, logging
 from pathlib import Path
 
+from .exceptions import *
 from dataclasses import dataclass
 from ..logic.config import Configuration as LogicConfiguration
 from ..util.config_helpers import asPath
 
 
-LOG = logging.getLogger("{{ cookiecutter.tool_name }}")
+LOG = logging.getLogger("{{ cookiecutter.tool_name_slug }}")
 
 BACKGROUND_COLORS = ["white","black","brown"] # better yet, use an enum for things like this -- this is just a quick example
 

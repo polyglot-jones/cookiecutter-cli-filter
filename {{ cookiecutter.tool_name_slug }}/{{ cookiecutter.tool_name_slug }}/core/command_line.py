@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import argparse, sys, logging
-from {{ cookiecutter.tool_name }} import __version__
+from {{ cookiecutter.tool_name_slug }} import __version__
 
-Log = logging.getLogger("{{ cookiecutter.tool_name }}")
+Log = logging.getLogger("{{ cookiecutter.tool_name_slug }}")
 
 
 def parse_args(args):

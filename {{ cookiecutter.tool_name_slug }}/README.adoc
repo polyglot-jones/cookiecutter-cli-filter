@@ -1,0 +1,46 @@
+= {{ cookiecutter.tool_name }}
+
+*{{ cookiecutter.tool_name }}: {{ cookiecutter.brief_description }}*
+
+// :imagesdir: https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}/doc/_static
+:imagesdir: doc/_static
+
+image::{{ cookiecutter.tool_name_slug }}-logo.png[alt="{{ cookiecutter.tool_name }} logo",height="64",width="64"]
+
+[width="100%",cols="2,5",options="header"]
+|===
+| Project site        | https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}        
+| Issues              | https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}/issues/
+| Authors             | {{ cookiecutter.author }}      
+| Latest Version      | 0.0.1
+| Python versions     | 3.5 or above                               |
+|===
+
+Other Contributors:
+
+include::CONTRIBUTORS.adoc[]
+
+== What is {{ cookiecutter.tool_name }}?
+
+{{ cookiecutter.long_description }}
+
+== Documentation
+
+For the User:
+
+* link:/doc/INSTALL.adoc[Installation]
+* link:/doc/QUICKSTART.adoc[Getting Started]
+
+For the Contributor/Developer:
+
+* link:/doc_technical/CONTRIBUTING.adoc[Contributing]
+* link:/doc_technical/DEVELOPMENT_SETUP.adoc[Development Environment Setup]
+* link:/doc_technical/DESIGN_NOTES.adoc[Design Notes]
+* link:/doc_technical/CHANGE_LOG.adoc[Change Log]
+
+
+
+== License
+
+include::LICENSE[]
+

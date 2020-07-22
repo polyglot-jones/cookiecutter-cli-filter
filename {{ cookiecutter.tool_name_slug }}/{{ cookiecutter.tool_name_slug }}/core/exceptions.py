@@ -47,19 +47,24 @@ class {{ cookiecutter.tool_name_camel_case }}ConfigError({{ cookiecutter.tool_na
 
     Attributes:
         message -- explanation of the error(s)
-    
-    Alternate Attributes:
+    """
+    exitcode = EX_CONFIG
+
+    def __init__(self, message):
+        self.message = message
+
+
+class {{ cookiecutter.tool_name_camel_case }}ConfigSetingError({{ cookiecutter.tool_name_camel_case }}Error):
+    """
+    Exception raised because of bad data in a config file.
+
+    Attributes:
         key -- the name of the setting
         attempted_value -- the value that is in error
         possible_values -- (optional) a list of valid choices
     """
     exitcode = EX_CONFIG
 
-    @overload
-    def __init__(self, message):
-        self.message = message
-
-    @overload
     def __init__(self, key, attempted_value, possible_values=None):
         self.message = CONFIG_OPTION_ERROR.format(key, attempted_value)
         if possible_values:
@@ -69,4 +74,5 @@ class {{ cookiecutter.tool_name_camel_case }}ConfigError({{ cookiecutter.tool_na
 __all__ = ("{{ cookiecutter.tool_name_camel_case }}Error", 
     "{{ cookiecutter.tool_name_camel_case }}ValueError", 
     "{{ cookiecutter.tool_name_camel_case }}TypeError",
-    "{{ cookiecutter.tool_name_camel_case }}ConfigError")
+    "{{ cookiecutter.tool_name_camel_case }}ConfigError",
+    "{{ cookiecutter.tool_name_camel_case }}ConfigSettingError")

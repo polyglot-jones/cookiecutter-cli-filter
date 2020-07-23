@@ -3,3 +3,68 @@
 {{ cookiecutter.tool_name }}
 
 (TBD)
+
+== Using a Filter Chain
+
+This is a command line "`filter`" tool. 
+That means it takes data from `stdin`, processes it, and writes it back out to `stdout`. 
+Along the way, any diagnostic info and/or error messages are written to `stderr`.
+
+The general pattern of use is:
+
+[source,bash]
+----
+type originalfile.txt > {{ cookiecutter.tool_name_slug }} > another-filter-tool > newfile.txt
+----
+
+The `type` command (in Windows) is a dead-simple command takes reads the contents of the named file and pumps it into  `stdout`. (Out from the perspective of the `type` command.) This is just an example. There are any number of commands/tools that could start off the filter chain.
+
+The `>` symbol says to take the `stdout` from the previous tool (`type`) and pump in into the `stdin` for the next tool, `{{ cookiecutter.tool_name_slug }}` in this case.
+
+Our tool then takes what it gets through `stdin`, filters it, and writes the processed data to `stdout`.
+
+The second `>` symbol says to take the `stdout` from our tool and send it on to the `stdin` of the next item in the chain.
+As shown, the next item could be another tool (a sorting tool, a search-and replace tool, a word counting tool, etc.), or it could just be the name of a file that the operating system will create.
+
+== How `stderr` Comes into Play
+
+If our tool needs to convey some information about what it's doing, it'll send those messages down a separate pipe known as `stderr`. (`stderr` is really misnamed. It should be something like "`stdinfo`" since it can communicate more information than just errors.)
+
+By default, messages that are sent down the `stderr` pipe go directly to the console.
+But that assumes that you are watching it run.
+You could be running this tool unattended.
+In that case, you'll want to redirect `stderr` somewhere else.
+For that, you use `2>` instead of `>`.
+
+[source,bash]
+----
+type originalfile.txt > {{ cookiecutter.tool_name_slug }} > newfile.txt 2> errors.log
+----
+
+The processed output still goes to newfile.txt, while any information about how the data was processed (or not) will go to a separate file, `errors.log` instead of to the console.
+
+BTW, `>` is shorthand for `1>`. They mean the same thing. 1 refers to `stdout`. 2 refers to `stderr`.
+
+On occasion, you might want to combine `stdout` and `stderr` on purpose.
+That way, the diagnostic messages will be interwoven with the processed data and you'll be able to see at what point in the processing the errors/warnings occur.
+
+To do this, there's a special notation to the combine the `stdout` pipe (#1) with the `stderr` pipe (#2).
+
+[source,bash]
+----
+type originalfile.txt > {{ cookiecutter.tool_name_slug }} 1> combined.txt 2>&1
+----
+
+The `&1` says to take the `stderr` pipe and just send the information to the same place that `1>` is sending the `stdout` data (namely, `combined.txt`).
+
+
+Another option is if you don't care about the `stderr` pipe at all, then you can send it nowhere.
+
+[source,bash]
+----
+type originalfile.txt > {{ cookiecutter.tool_name_slug }} 1> newfile.txt 2> nul
+----
+
+`nul` is the name of a special "`device`" that simply ignores whatever it receives through `stdin`.
+
+

@@ -23,16 +23,16 @@ You can certainly have your command-line tool work any way you want.
 
 The root folder is `/myapp`. Within that are these files and subfolders:
 
-* myapp/ -- the source code
-* myapp/logic/ -- the "`business logic code`" that actually performs the task at hand. This code is of great concern to whoever is wearing the subject-matter hat.
-* myapp/core/ -- "`infrastructure code`" that supports the business logic. This code is of more concern to whoever is wearing the operations hat. This code knows a little bit about the task at hand, but doesn't get deep into the details.
-* myapp/util/ -- "`utility code`" that has nothing to do with the task at hand, per se. (Consider this an incubator for code that might someday be extracted into a separate module for use by other apps.)
-* myapp/__main__.py -- The main body of the app. It parses the command line, loads the configuration (if any), sets up the logging, invokes your business logic, and then handles otherwise uncaught exceptions.
-* doc/ -- the user docs for your tool
-* doc_technical/ -- documentation aimed at yourself and possible collaborators
-* tests/ -- the unit tests
+* myapp/ -- The source code. (So, that's /myapp/myapp/... in case that's not clear.)
+* myapp/logic/ -- The "`business logic`" code that actually performs the task at hand. This code is of great concern to whoever is wearing the subject-matter hat.
+* myapp/core/ -- "`Infrastructure code`" that supports the business logic. This code is of more concern to whoever is wearing the operations hat. This code knows a little bit about the task at hand, but doesn't get deep into the details.
+* myapp/util/ -- "`Utility code`" that has nothing to do with the task at hand, per se. (Consider this an incubator for code that might someday be extracted into a separate module for use by other apps.)
+* myapp/#__main__#.py -- The main body of the app. It parses the command line, loads the configuration (if any), sets up the logging, invokes your business logic, and then handles otherwise uncaught exceptions.
+* doc/ -- The user docs for your tool.
+* doc_technical/ -- Documentation aimed at yourself and possible collaborators.
+* tests/ -- The unit tests.
 * setup.py -- The beginnings of a setup.py (in case your app grows into a module worthy of submitting to PyPl).
-* requirements.txt -- names the external Python modules that your app requires (just `colorlog` to start).
+* requirements.txt -- Names the external Python modules that your app requires (just `colorlog` to start).
 
 
 *Unit Testing:* 
@@ -43,11 +43,22 @@ The root folder is `/myapp`. Within that are these files and subfolders:
 
 * The standard Python `logging` mechanism is customized with two additional logging levels: DIAGNOSTIC and TRACE.
 Thus, it goes: critical, error, warning, info, DIAGNOSTIC, debug, TRACE. 
-* Two versiona of the log are created. A detailed log is written to disk. A less noisy log is sent to the console (to stderr to be precise).
+
+* Two versions of the log are created. 
+A detailed log is written to disk. 
+A less noisy log is sent to the console (to `stderr` to be precise).
+
 * The version of the log that is saved to disk always includes all log messages at every level.
-* The default name of this log file is myapp.log (where myapp is the name (slug) for the tool being created.) Use the `--filename` switch to specify a different name. Use the `--nologfile` switch to suppress it altogether.
-* By default the version of the log written to the console (stderr) excludes DIAGNOSTIC, DEBUG and TRACE. Use the `--verbose`, `--debug`, or `--trace` switches to set the console logging level to DIAGNOSTIC, DEBUG, or TRACE, respectively.
-* Log messages sent to the console are colorized (via `colorlog`) by default. (The --nocolor switch turns this off.)
+
+* The default name of this log file is myapp.log (where myapp is the name (slug) for the tool being created.) 
+Use the `--filename` switch to specify a different name. 
+Use the `--nologfile` switch to suppress it altogether.
+
+* By default the version of the log written to the console (stderr) excludes DIAGNOSTIC, DEBUG and TRACE. 
+Use the `--verbose`, `--debug`, or `--trace` switches to set the console logging level to DIAGNOSTIC, DEBUG, or TRACE, respectively.
+
+* Log messages sent to the console are colorized (via `colorlog`) by default. 
+(The --nocolor switch turns this off.) 
 
 *Command Line Switches:* 
 

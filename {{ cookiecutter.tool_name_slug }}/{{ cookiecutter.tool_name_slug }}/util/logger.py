@@ -81,9 +81,10 @@ def setup_logging(name="{{ cookiecutter.tool_name_slug }}", loglevel=logging.INF
     log_console.setLevel(loglevel)
     logger.addHandler(log_console)
 
-    log_file = logging.FileHandler(filename=os.path.join(os.getcwd(), logfilename))
-    log_file.setFormatter(VERBOSE_FORMAT)
-    logger.addHandler(log_file)
+    if logfilename:
+        log_file = logging.FileHandler(filename=os.path.join(os.getcwd(), logfilename))
+        log_file.setFormatter(VERBOSE_FORMAT)
+        logger.addHandler(log_file)
 
 def equivalent_log_level(verbosity: int) -> int:
     verbosity *= 10

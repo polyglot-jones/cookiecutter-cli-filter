@@ -23,8 +23,10 @@ def main(args):
         # Exiting early. (This must have been a --help or --version call, so there's nothing more to do.)
         sys.exit(exitcode)
 
+    # TODO load Config and Settings
 
-    setup_logging(name="{{ cookiecutter.tool_name_slug }}", loglevel = SWITCHES.loglevel, logfile = SWITCHES.logfile, nocolor= SWITCHES.nocolor)
+    logfile = ("" if SWITCHES.nologfile else SWITCHES.logfile)
+    setup_logging(name="{{ cookiecutter.tool_name_slug }}", loglevel = SWITCHES.loglevel, logfilename = logfile, nocolor= SWITCHES.nocolor)
 
     LOG.diagnostic(f"SWITCHES.loglevel = {SWITCHES.loglevel}")
     LOG.trace("Starting job...")
@@ -33,6 +35,11 @@ def main(args):
         LOG.info("Running in dev mode.")
         # TODO special setup for dev mode (e.g. suppressing actual web service calls)
 
+    if SWITCHES.infile:
+        LOG.info(f"Input will be taken from {SWITCHES.infile}, rather than stdin.")
+
+    if SWITCHES.outfile:
+        LOG.info(f"Output will be written to {SWITCHES.outfile}, rather than stdout.")
 
     try:
         filter_one_go()         # TODO <-- here's the beef

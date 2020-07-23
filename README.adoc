@@ -1,0 +1,61 @@
+= Cookie Cutter Template: Command-Line-Interface Filter (Python)
+
+[width=100%,cols=2,5]
+|===
+|Project site    | https://github.com/polyglot-jones/cookiecutter-cli-filter         |
+|Issues          | https://github.com/polyglot-jones/cookiecutter-cli-filter/issues/ |
+|Authors         | Craig Jones (polyglot-jones)                                      |
+|Latest Version  | 0.0.1                                                             |
+|Python versions | 3.5 or above                                                      |
+|===
+
+This project is a link:https://github.com/cookiecutter/cookiecutter[cookiecutter] template. This template generates a skeleton Python app
+-- specifically, an app that's meant to be invoked via the command line as a filter.
+Where Filter means a program that accepts input via stdin, processes it in some way, 
+and then sends that processed data along to stdout. 
+
+*This template assumes Python 3.5 or above.*
+
+== Usage
+
+[source,bash]
+----
+pip install cookiecutter
+cd (the new project's parent folder)
+cookiecutter gh:polyglot-jones/cookiecutter-cli-filter
+----
+Then, fill in the required information, as prompted...
+
+[width=100%]
+|===
+| tool_name            | A name for your tool in title-case (e.g. Journal Parser)
+| tool_name_slug       | Base folder name for the project (keep it short, <= 12 chars suggested)
+| brief_description    | A one-sentence description
+| long_description     | A slightly more detailed description, if you want
+| github_user          | Your github user id
+| github_repo          | What you'll name the repository for this project if/when you upload it to GitHub
+| author               | Your full name (Title Case with spaces suggested)
+| author_mail          | Your contact e-mail
+| project_site         | The full URL to (what could be) the repository
+| project_version      | 0.0.1
+| tool_name_camel_case | For when the project name is needed as part of a CamelCase identifier.
+| year                 | For the copyright statement.
+|===
+
+Next time, you can leave out the gh:... qualifier and run the cookiecutter from your local cache:
+
+[source,bash]
+----
+cookiecutter cookiecutter-cli-filter
+----
+Again, fill in the required information, as prompted, or...
+
+For a do-over using the same information you entered last time:
+
+[source,bash]
+----
+cookiecutter --replay cookiecutter-cli-filter
+----
+
+Note: Those answers are kept in a json file in ~/.cookiecutter_replay. Feel free to edit it first.
+

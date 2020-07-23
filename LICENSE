@@ -1,7 +1,6 @@
-Copyright (c) polyglot-jones
+Copyright (c) Craig Jones, 2020
 
-Project home: https://github.com/polyglot-jones/cookiecutterclifilter
-Project contact: craig@k6nnl.com
+Project home: https://github.com/polyglot-jones/cookiecutter-cli-filter
 
 Redistribution and use in source and binary forms, with or without modification,
 are permitted provided that the following conditions are met:
@@ -13,7 +12,7 @@ are permitted provided that the following conditions are met:
        notice, this list of conditions and the following disclaimer in the
        documentation and/or other materials provided with the distribution.
 
-    3. Neither the name of {{ cookiecutter.author }} nor the names of its contributors may be used
+    3. Neither the name of Craig Jones nor the names of its contributors may be used
        to endorse or promote products derived from this software without
        specific prior written permission.
 

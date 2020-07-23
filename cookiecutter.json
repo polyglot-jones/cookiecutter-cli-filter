@@ -9,6 +9,6 @@
   "author_mail": "author@mail.com",
   "project_site": "https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}",
   "project_version": "0.0.1",
-  "tool_name_camel_case": "{{ cookiecutter.tool_name.lower() | replace(' ', '') | replace('-', '') | capitalize }}",
+  "tool_name_camel_case": "{{ cookiecutter.tool_name.lower() | capitalize | replace(' ', '') | replace('-', '') }}",
   "year": "{% now 'utc', '%Y' %}"
 }

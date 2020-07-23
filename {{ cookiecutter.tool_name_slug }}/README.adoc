@@ -13,7 +13,7 @@ image::{{ cookiecutter.tool_name_slug }}-logo.png[alt="{{ cookiecutter.tool_name
 | Issues              | https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}/issues/
 | Authors             | {{ cookiecutter.author }}      
 | Latest Version      | 0.0.1
-| Python versions     | 3.5 or above                               |
+| Python versions     | 3.6 or above                               |
 |===
 
 Other Contributors:

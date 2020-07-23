@@ -1,5 +1,5 @@
-# Python itself must be >= 3.5
+# Python itself must be >= 3.6
 pytest>=5.4.3
 colorlog
 # colorama
-progressbar2
+# progressbar2

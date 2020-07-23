@@ -42,8 +42,8 @@ from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 
 
-if sys.version_info < (3, 5,):
-    raise RuntimeError("{{ cookiecutter.tool_name }} requires Python 3.5.0+")
+if sys.version_info < (3, 6,):
+    raise RuntimeError("{{ cookiecutter.tool_name }} requires Python 3.6.0+")
 
 
 #
@@ -99,7 +99,7 @@ setup(
         'performance':  required_performance
     },
     entry_points={'console_scripts': [
-        '{{ cookiecutter.tool_name_slug | replace("_", "-") }} = {{ cookiecutter.tool_name_slug }}.actions.cli:cli',
+        '{{ cookiecutter.tool_name_slug | replace("_", "-") }} = {{ cookiecutter.tool_name_slug }}',
     ]},
     description='{{ cookiecutter.brief_description }}',
     long_description=long_description,
@@ -111,7 +111,7 @@ setup(
         'Operating System :: MacOS',
         'Operating System :: Microsoft :: Windows',
         'Operating System :: POSIX',
-        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
         'Topic :: Security',
     ],
     #tests_require=required_test,

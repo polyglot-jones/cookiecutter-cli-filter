@@ -16,22 +16,49 @@ def main(args):
     import {{ cookiecutter.tool_name_slug }}
 
     __package__ = str("{{ cookiecutter.tool_name_slug }}")
-    LOG = logging.getLogger("{{ cookiecutter.tool_name_slug }}")
 
+    exitcode = 0
     SWITCHES = parse_args(args)
-    setup_logging(SWITCHES.loglevel)
+    if not SWITCHES:
+        # Exiting early. (This must have been a --help or --version call, so there's nothing more to do.)
+        sys.exit(exitcode)
+
+
+    setup_logging(name="{{ cookiecutter.tool_name_slug }}", loglevel = SWITCHES.loglevel, logfile = SWITCHES.logfile, nocolor= SWITCHES.nocolor)
+
+    LOG.diagnostic(f"SWITCHES.loglevel = {SWITCHES.loglevel}")
     LOG.trace("Starting job...")
-    LOG.debug("SWITCHES.loglevel = %s" % SWITCHES.loglevel)
-    if (SWITCHES.devmode):
+
+    if SWITCHES.devmode:
         LOG.info("Running in dev mode.")
-    filter_one_go()
+        # TODO special setup for dev mode (e.g. suppressing actual web service calls)
+
+
+    try:
+        filter_one_go()         # TODO <-- here's the beef
+    except Exception as e:
+        if hasattr(e, "loglevel"):
+            LOG.log(e.loglevel,e)
+        else:
+            LOG.critical(e)
+
+        exitcode = 1    
+        if hasattr(e, "exitcode"):
+            if e.exitcode > 0:
+                exitcode = e.exitcode
+            else:
+                LOG.error("The warning exception above should have been caught and handled. Instead, it's causing this app to abort.")
+    
     LOG.trace("Script ending.")
+    LOG.diagnostic(f"Exit code = {exitcode}")
+    sys.exit(exitcode)
+
 
 
 def run():
     """Entry point for console_scripts"""
 
-    # Throw away argv[0] which is this program's name
+    # Throw away argv[0] which is this program's name ({{ cookiecutter.tool_name_slug }})
     main(sys.argv[1:])
 
 

@@ -35,6 +35,7 @@ import re
 import os
 import sys
 import codecs
+import pathlib
 
 from os.path import dirname, join
 from setuptools import setup, find_packages
@@ -60,13 +61,13 @@ with codecs.open(version_file, 'r', 'latin1') as fp:
 with (pathlib.Path(__file__) / 'requirements.txt').open("rt") as f:
     required = f.read().splitlines()
 
-with (pathLib.Path(__file__) / 'requirements-performance.txt').open("rt") as f:
+with (pathlib.Path(__file__) / 'requirements-performance.txt').open("rt") as f:
     required_performance = f.read().splitlines()
 
 #with (pathlib.Path(__file__) / 'requirements-runtest.txt').open("rt") as f:
 #    required_test = f.read().splitlines()
 
-with (pathLib.Path(__file__) / 'README.adoc').open("rt") as f:
+with (pathlib.Path(__file__) / 'README.adoc').open("rt") as f:
     long_description = f.read()
 
 

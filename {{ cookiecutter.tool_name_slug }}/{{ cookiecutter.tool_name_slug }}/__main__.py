@@ -7,7 +7,7 @@ from .core.command_line import parse_args
 from .core.exceptions import *
 from .core.config import Configuration
 from .util.logger import setup_logging, loglevel_for_exception, logging_stub
-from .logic import {{ cookiecutter.tool_name_camel_case }}Filter
+from .logic.{{ cookiecutter.tool_name_slug }}_filter import {{ cookiecutter.tool_name_camel_case }}Filter
 
 # In case we try to post a logging message before logging is actually set up
 LOG = logging_stub()
@@ -70,13 +70,13 @@ def main(args):
     except Exception as e:
         LOG.log(loglevel_for_exception(e, otherwise=logging.CRITICAL),e)
 
-        exitcode = 1    
+        exitcode = 1
         if hasattr(e, "exitcode"):
             if e.exitcode > 0:
                 exitcode = e.exitcode
             else:
                 LOG.error("The warning exception above should have been caught and handled. Instead, it's causing this app to abort.")
-    
+
     LOG.trace("Script ending.")
     LOG.diagnostic(f"Exit code = {exitcode}")
     sys.exit(exitcode)

@@ -9,9 +9,9 @@ image::{{ cookiecutter.tool_name_slug }}-logo.png[alt="{{ cookiecutter.tool_name
 
 [width="100%",cols="2,5",options="header"]
 |===
-| Project site        | https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}        
+| Project site        | https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}
 | Issues              | https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}/issues/
-| Authors             | {{ cookiecutter.author }}      
+| Authors             | {{ cookiecutter.author }}
 | Latest Version      | 0.0.1
 | Python versions     | 3.6 or above                               |
 |===

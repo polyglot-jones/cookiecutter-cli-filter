@@ -33,11 +33,11 @@ class Configuration:
     """
     This is the parent class for all configuration settings.
     There are (to start) two child configs: CoreConfiguration (above), and logic.Configuration
-    
+
     "Configs" are read-only (vs. "Settings" that get written back to storage).
     Configs includes things like the URLs to REST services.
 
-    The logic subfolder has its own (child) Config object. 
+    The logic subfolder has its own (child) Config object.
     Be sure to follow that pattern when adding additional subfolders.
     """
     core: CoreConfiguration
@@ -66,7 +66,7 @@ class Configuration:
             converters=ADDITIONAL_CONFIGPARSER_CONVERTERS)
         parser.read_string(configfilecontents)
         issues = []
-        
+
         self.core.setParsedOptions(parser, issues)
         self.logic.setParsedOptions(parser, issues)
 
@@ -83,4 +83,3 @@ class Configuration:
 
 
 
-    

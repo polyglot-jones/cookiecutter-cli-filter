@@ -4,22 +4,31 @@ import os, sys
 import logging
 import logging.handlers
 
+from functools import lru_cache
 from colorlog import ColoredFormatter
 
-TRACE = 2000
-DIAGNOSTIC = 1500
+CRITICAL = logging.CRITICAL
+ERROR = logging.ERROR
+WARNING = logging.WARNING
+INFO = logging.INFO
+DIAGNOSTIC = INFO+1
+DEBUG = logging.DEBUG
+TRACE = DEBUG+1
 
 # Currently, we are not doing anything multi-threaded, so the verbose format doesn't need thread info at this time
 # VERBOSE_FORMAT = logging.Formatter("%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s")
 VERBOSE_FORMAT = logging.Formatter("%(asctime)s [%(module)s] %(levelname)s %(message)s")
 SIMPLE_FORMAT = logging.Formatter("%(levelname)s %(message)s")
+
+# Color choices are: black, red, green, yellow, blue, purple, cyan, white
+# Prefix choices are: bold_, thin_, bg_, bg_bold_
 SIMPLE_COLORED = ColoredFormatter("[ %(log_color)s*%(reset)s ] %(blue)s%(message)s",
         datefmt=None,
         reset=True,
         log_colors={
             'TRACE': 'gray',
             'DEBUG': 'cyan',
-            'DIAGNOSTIC': 'magenta',
+            'DIAGNOSTIC': 'purple',
             'INFO': 'white',
             'WARNING': 'yellow',
             'ERROR': 'red',
@@ -29,12 +38,19 @@ SIMPLE_COLORED = ColoredFormatter("[ %(log_color)s*%(reset)s ] %(blue)s%(message
         style='%'
     )
 
+
+def logging_stub() -> logging.Logger:
+    return logging.getLogger("stub")
+
+
+@lru_cache(maxsize=32)
 def setup_logging(name="{{ cookiecutter.tool_name_slug }}", loglevel=logging.INFO, logfilename="{{ cookiecutter.tool_name_slug }}.log", nocolor=False):
     """
     Setup initial logging configuration
     """
 
-    assert isinstance(name, str)
+    if not sys.stderr.isatty:
+        nocolor = True
 
     logging.addLevelName(DIAGNOSTIC, "DIAGNOSTIC")
     logging.addLevelName(TRACE, "TRACE")
@@ -86,6 +102,11 @@ def setup_logging(name="{{ cookiecutter.tool_name_slug }}", loglevel=logging.INF
         log_file.setFormatter(VERBOSE_FORMAT)
         logger.addHandler(log_file)
 
+def loglevel_for_exception(e: Exception, otherwise=logging.ERROR):
+    if hasattr(e, "loglevel"):
+        return e.loglevel
+    return otherwise
+
 def equivalent_log_level(verbosity: int) -> int:
     verbosity *= 10
 
@@ -99,4 +120,8 @@ def equivalent_log_level(verbosity: int) -> int:
 
 
 
-__all__ = ("setup_logging", "setup_file_logger", "equivalent_log_level", "DIAGNOSTIC", "TRACE")
+__all__ = ("logging_stub",
+    "setup_logging",
+    "loglevel_for_exception",
+    "equivalent_log_level",
+    "CRITICAL", "ERROR", "WARNING", "INFO", "DIAGNOSTIC", "DEBUG", "TRACE")

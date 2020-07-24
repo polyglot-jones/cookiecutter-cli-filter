@@ -53,7 +53,7 @@ class {{ cookiecutter.tool_name_camel_case }}ConfigError({{ cookiecutter.tool_na
     exitcode = EX_CONFIG
 
 
-class {{ cookiecutter.tool_name_camel_case }}ConfigSetingWarning({{ cookiecutter.tool_name_camel_case }}Error):
+class {{ cookiecutter.tool_name_camel_case }}ConfigSettingWarning({{ cookiecutter.tool_name_camel_case }}Error):
     """
     Warning raised because of a bad setting in a config file.
 
@@ -72,8 +72,6 @@ class {{ cookiecutter.tool_name_camel_case }}ConfigSetingWarning({{ cookiecutter
         self.loglevel = loglevel
 
 
-__all__ = ("{{ cookiecutter.tool_name_camel_case }}Error", 
-    "{{ cookiecutter.tool_name_camel_case }}ValueError", 
-    "{{ cookiecutter.tool_name_camel_case }}TypeError",
+__all__ = ("{{ cookiecutter.tool_name_camel_case }}Error",
     "{{ cookiecutter.tool_name_camel_case }}ConfigError",
     "{{ cookiecutter.tool_name_camel_case }}ConfigSettingWarning")

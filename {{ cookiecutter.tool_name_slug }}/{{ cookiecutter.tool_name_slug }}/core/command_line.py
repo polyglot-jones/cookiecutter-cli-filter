@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-import argparse, sys
+import argparse
+from ..util.logger import *
 from {{ cookiecutter.tool_name_slug }} import __version__
 
 # KEEP IN MIND: logging has not been set up yet. Don't try to make logging calls in here.
@@ -16,13 +17,14 @@ def parse_args(args):
     ver=__version__
     parser = argparse.ArgumentParser(description="")
     parser.add_argument("--version",action="version",version=f"{{ cookiecutter.tool_name }} {ver}")
-    parser.add_argument("-v","--verbose",dest="loglevel",help="sets loglevel to DIAGNOSTIC",action="store_const",const=logging.DIAGNOSTIC,default=logging.INFO)
-    parser.add_argument("--debug",dest="loglevel",help="sets loglevel to DEBUG",action="store_const",const=logging.DEBUG)
-    parser.add_argument("--trace",dest="loglevel",help="sets loglevel to TRACE",action="store_const",const=logging.TRACE)
+    parser.add_argument("-v","--verbose",dest="loglevel",help="sets loglevel to DIAGNOSTIC",action="store_const",const=DIAGNOSTIC,default=INFO)
+    parser.add_argument("--debug",dest="loglevel",help="sets loglevel to DEBUG",action="store_const",const=DEBUG)
+    parser.add_argument("--trace",dest="loglevel",help="sets loglevel to TRACE",action="store_const",const=TRACE)
     parser.add_argument("--nocolor", dest="nocolor",help="turns off coloring the log messages that are sent to the console",action="store_true",default=False)
     parser.add_argument("-l", "--logfile", dest="logfile",help="specifies the name (and path) for the log file ({{ cookiecutter.tool_name_slug }}.log by default)",default="{{ cookiecutter.tool_name_slug }}.log")
     parser.add_argument("--nologfile", dest="nologfile",help="suppresses using a log file, relying on just the console",action="store_true",default=False)
-    
+    parser.add_argument("-c", "--configfile", dest="configfile",help="specifies the name (and path) for the configuration file (instead of ./{{ cookiecutter.tool_name_slug }}.ini)",default="{{ cookiecutter.tool_name_slug }}.ini")
+
     # The following options are defined only in case you need them.
     # The initial code provided by this template does nothing with them (other than log that they were invoked).
     parser.add_argument("-d", "--devel", dest="devmode",help="turns on developer mode",action="store_true",default=False)

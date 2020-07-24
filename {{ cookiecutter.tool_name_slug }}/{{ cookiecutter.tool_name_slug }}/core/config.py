@@ -51,10 +51,12 @@ class Configuration:
         try:
             with configfilename.open("rt") as configFile:
                 ini = configFile.read()
+            self.setFromINIContents(ini)
+        except FileNotFoundError:
+            pass
         except Exception as e:
-            raise {{ cookiecutter.tool_name_camel_case }}ConfigError("Cannot read configuration file {0}. {1}".format(configfilename, e))
+            raise {{ cookiecutter.tool_name_camel_case }}ConfigError(f"Cannot read configuration file {configfilename}. {e}")
 
-        self.setFromINIContents(ini)
 
     def setFromINIContents(self, configfilecontents: str):
         ADDITIONAL_CONFIGPARSER_CONVERTERS = {

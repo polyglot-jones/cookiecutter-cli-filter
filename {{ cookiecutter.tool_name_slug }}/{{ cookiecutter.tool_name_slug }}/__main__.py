@@ -1,4 +1,33 @@
-import os, sys, logging
+import os, sys, logging, pathlib
+from sys import stdin, stdout, stderr
+
+__package__ = str("{{ cookiecutter.tool_name_slug }}")
+
+from .core.command_line import parse_args
+from .core.exceptions import *
+from .core.config import Configuration
+from .util.logger import setup_logging, loglevel_for_exception, logging_stub
+from .logic import {{ cookiecutter.tool_name_camel_case }}Filter
+
+# In case we try to post a logging message before logging is actually set up
+LOG = logging_stub()
+
+def load_switches(args):
+    switches = parse_args(args)
+    if not switches:
+        # Exiting early. (This must have been a --help or --version call, so there's nothing more to do.)
+        sys.exit(0)
+    return switches
+
+def load_configuration(configfile) -> Configuration:
+    config = Configuration()
+    if configfile:
+        try:
+            config.setFromINIFile(pathlib.Path(configfile))
+            config.runtimeValidation()
+        except {{ cookiecutter.tool_name_camel_case }}ConfigError as e:
+            LOG.log(loglevel_for_exception(e),e)
+    return config
 
 def main(args):
     """Main entry point allowing external calls
@@ -6,29 +35,21 @@ def main(args):
     Args:
       args ([str]): command line parameter list
     """
-    from sys import stdin, stdout, stderr
-    from .core.command_line import parse_args
-    from .util.logger import setup_logging
-    from .logic import filter_one
 
     parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     sys.path.insert(1, parent_dir)
     import {{ cookiecutter.tool_name_slug }}
 
-    __package__ = str("{{ cookiecutter.tool_name_slug }}")
-
     exitcode = 0
-    SWITCHES = parse_args(args)
-    if not SWITCHES:
-        # Exiting early. (This must have been a --help or --version call, so there's nothing more to do.)
-        sys.exit(exitcode)
+    SWITCHES = load_switches(args)
 
-    # TODO load Config and Settings
-
-    logfile = ("" if SWITCHES.nologfile else SWITCHES.logfile)
-    setup_logging(name="{{ cookiecutter.tool_name_slug }}", loglevel = SWITCHES.loglevel, logfilename = logfile, nocolor= SWITCHES.nocolor)
-
+    logfilename = ("" if SWITCHES.nologfile else SWITCHES.logfile)
+    setup_logging(name="{{ cookiecutter.tool_name_slug }}", loglevel = SWITCHES.loglevel, logfilename = logfilename, nocolor= SWITCHES.nocolor)
+    LOG = logging.getLogger("{{ cookiecutter.tool_name_slug }}")
     LOG.diagnostic(f"SWITCHES.loglevel = {SWITCHES.loglevel}")
+
+    CONFIG = load_configuration(SWITCHES.configfile)
+
     LOG.trace("Starting job...")
 
     if SWITCHES.devmode:
@@ -41,13 +62,13 @@ def main(args):
     if SWITCHES.outfile:
         LOG.info(f"Output will be written to {SWITCHES.outfile}, rather than stdout.")
 
+    instream=stdin if not SWITCHES.infile else open(SWITCHES.infile, "r")
+    outstream=stdout if not SWITCHES.outfile else open(SWITCHES.outfile, "w")
     try:
-        filter_one_go()         # TODO <-- here's the beef
+        with JnlParserFilter(instream=instream, outstream=outstream) as f:
+            f.run()                                                           # TODO <-- here's the beef
     except Exception as e:
-        if hasattr(e, "loglevel"):
-            LOG.log(e.loglevel,e)
-        else:
-            LOG.critical(e)
+        LOG.log(loglevel_for_exception(e, otherwise=logging.CRITICAL),e)
 
         exitcode = 1    
         if hasattr(e, "exitcode"):

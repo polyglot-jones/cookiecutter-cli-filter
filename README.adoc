@@ -59,6 +59,7 @@ Use the `--verbose`, `--debug`, or `--trace` switches to set the console logging
 
 * Log messages sent to the console are colorized (via `colorlog`) by default. 
 (The --nocolor switch turns this off.) 
+Also, if `stderr` is piped away from the console, then coloring is automatically turned off.
 
 *Command Line Switches:* 
 
@@ -67,7 +68,7 @@ Use the `--verbose`, `--debug`, or `--trace` switches to set the console logging
 * `--verbose` (or `-v`), `--debug`, `--trace`, `--logfile` (or `-l`), `--nologfile`, and `--nocolor` affect the logging (as described above).
 * `--devel` (or `-d`) is intended to turn on "`dev mode.`" Use this however you like.
 * `--infile` (or `-i`) allows you to specify the name (and path) for the input (instead of stdin).
-* `--outfile` (or `-i`) allows you to specify the name (and path) for the output (instead of stdout).
+* `--outfile` (or `-o`) allows you to specify the name (and path) for the output (instead of stdout).
 
 *Configuration and Settings:*
 

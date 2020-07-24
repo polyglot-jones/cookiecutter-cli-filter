@@ -47,8 +47,7 @@ class Settings:
             try:
                 settingsFile = filepath.open(mode = "r")
             except Exception as e:
-                raise {{ cookiecutter.tool_name_camel_case }}ConfigError(
-                    "Cannot read Settings file {0}. {1}".format(settingsFilename, e))
+                raise {{ cookiecutter.tool_name_camel_case }}ConfigError("Cannot read Settings file {settingsFilename}. {e}")
             ini = settingsFile.read()
             settingsFile.close()
             self.setFromINIContents(ini)
@@ -57,8 +56,7 @@ class Settings:
         try:
             settingsFile = open(settingsFilename, "wt")
         except Exception as e:
-            raise {{ cookiecutter.tool_name_camel_case }}ConfigError(
-                "Cannot write Settings file {0}. {1}".format(settingsFilename, e))
+            raise {{ cookiecutter.tool_name_camel_case }}ConfigError("Cannot write Settings file {settingsFilename}. {e}")
 
         parser = configparser.ConfigParser()
         self.core.copySettingsToParser(parser)

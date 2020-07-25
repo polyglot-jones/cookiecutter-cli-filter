@@ -2,29 +2,8 @@
 This file contains utils and reusable functions
 """
 import logging
-from collections import namedtuple
 
 LOG = logging.getLogger('{{ cookiecutter.tool_name_slug }}')
 
-def dict_to_obj(data):
-    """
-    Transform an input dict into a object.
+# TODO Misc utility/helper functions go here.
 
-    >>> data = dict(hello="world", bye="see you")
-    >>> obj = dict_to_obj(data)
-    >>> obj.hello
-    'world'
-
-    :param data: input dictionary data
-    :type data: dict
-    """
-    assert isinstance(data, dict)
-
-    if not data:
-        return namedtuple("OBJ", [])
-
-    obj = namedtuple("OBJ", list(data.keys()))
-
-    return obj(**data)
-
-__all__ = ("dict_to_obj")

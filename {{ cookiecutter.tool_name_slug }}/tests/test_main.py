@@ -1,6 +1,6 @@
 import sys, io
 import pytest
-from ..{{ cookiecutter.tool_name_slug }}.__main__ import main
+from {{ cookiecutter.tool_name_slug }}.__main__ import main
 
 
 def test_{{ cookiecutter.tool_name_slug }}___main__good():

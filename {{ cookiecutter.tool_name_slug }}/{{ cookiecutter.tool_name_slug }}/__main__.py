@@ -6,7 +6,7 @@ __package__ = str("{{ cookiecutter.tool_name_slug }}")
 from .core.command_line import parse_args
 from .core.exceptions import *
 from .core.config import Configuration
-from .util.logger import setup_logging, loglevel_for_exception, logging_stub
+from .util.logger import setup_logging, logging_stub
 from .logic.{{ cookiecutter.tool_name_slug }}_filter import {{ cookiecutter.tool_name_camel_case }}Filter
 
 # In case we try to post a logging message before logging is actually set up
@@ -26,7 +26,7 @@ def load_configuration(configfile) -> Configuration:
             config.setFromINIFile(pathlib.Path(configfile))
             config.runtimeValidation()
         except {{ cookiecutter.tool_name_camel_case }}ConfigError as e:
-            LOG.log(loglevel_for_exception(e),e)
+            LOG.exception(e)
     return config
 
 def main(args):
@@ -54,21 +54,21 @@ def main(args):
 
     if SWITCHES.devmode:
         LOG.info("Running in dev mode.")
-        # TODO special setup for dev mode (e.g. suppressing actual web service calls)
+        # TODO special setup for dev mode (e.g. suppressing actual web service calls, not actually sending any emails)
 
     if SWITCHES.infile:
+        sys.stdin = open(SWITCHES.infile, "r")
         LOG.info(f"Input will be taken from {SWITCHES.infile}, rather than stdin.")
 
     if SWITCHES.outfile:
+        sys.stdout = open(SWITCHES.outfile, "w")
         LOG.info(f"Output will be written to {SWITCHES.outfile}, rather than stdout.")
 
-    instream=stdin if not SWITCHES.infile else open(SWITCHES.infile, "r")
-    outstream=stdout if not SWITCHES.outfile else open(SWITCHES.outfile, "w")
     try:
-        with JnlParserFilter(instream=instream, outstream=outstream) as f:
+        with JnlParserFilter() as f:
             f.run()                                                           # TODO <-- here's the beef
     except Exception as e:
-        LOG.log(loglevel_for_exception(e, otherwise=logging.CRITICAL),e)
+        LOG.exception(e)
 
         exitcode = 1
         if hasattr(e, "exitcode"):
@@ -85,7 +85,6 @@ def main(args):
 
 def run():
     """Entry point for console_scripts"""
-
     # Throw away argv[0] which is this program's name ({{ cookiecutter.tool_name_slug }})
     main(sys.argv[1:])
 

@@ -40,7 +40,7 @@ SIMPLE_COLORED = ColoredFormatter("[ %(log_color)s*%(reset)s ] %(blue)s%(message
 
 
 @lru_cache(maxsize=32)
-def setup_logging(name="{{ cookiecutter.tool_name_slug }}", loglevel=logging.INFO, logfile=: Optional[Path] = None, nocolor=False):
+def setup_logging(name="{{ cookiecutter.tool_name_slug }}", loglevel=logging.INFO, logfile: Optional[Path] = None, nocolor=False):
     """
     Setup initial logging configuration.
     After calling this setup code, whevever you do a logging.getlogger(name), you'll get an enhanced logger that includes:
@@ -128,7 +128,7 @@ def setup_logging(name="{{ cookiecutter.tool_name_slug }}", loglevel=logging.INF
     logger.addHandler(log_console)
 
     if logfile:
-        log_file = logging.FileHandler(logfile.resolve()))
+        log_file = logging.FileHandler(logfile.resolve())
         log_file.setFormatter(VERBOSE_FORMAT)
         logger.addHandler(log_file)
 

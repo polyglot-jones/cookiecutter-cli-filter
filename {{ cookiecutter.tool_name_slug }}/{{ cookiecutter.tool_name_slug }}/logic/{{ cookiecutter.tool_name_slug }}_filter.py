@@ -17,37 +17,33 @@ class {{ cookiecutter.tool_name_camel_case }}Filter(AbstractContextManager):
         pass
 
 
-    def run(self):
-        try:
-            self.actual_filter_code()
-            # self.actual_filter_code_take_2()
-
-            LOG.info(f"Number of lines processed = {self.linecount}")
-            LOG.info(f"Of those, number of lines skipped = {self.skipcount}")
-        except {{ cookiecutter.tool_name_camel_case }}Error as e:
-            LOG.error(f"Uncaught {{ cookiecutter.tool_name_camel_case }}Error detected. There is no good reason why we didn't handle it before {{ cookiecutter.tool_name_camel_case }}Filter finished running.")
-            raise e
+    def show_results(self):
+        LOG.info(f"Number of lines processed = {self.linecount}")
+        LOG.info(f"Of those, number of lines skipped = {self.skipcount}")
 
 
-    def actual_filter_code(self):
+    def count_lines(self):
         """
-        Method #1: Process the stream (efficiently) line-by-line
+        This does the actual work for the COUNT-LINES command.
         """
+        # Example of one method: Process the stream (efficiently) line-by-line
         for line in sys.stdin.readlines():
             line = line.strip()
             self.linecount += 1
-            if line.startswith("#"):
+            if line == "" or line.startswith("#"):
                 self.skipcount += 1
             else:
                 # TODO Process line here
                 pass
             sys.stdout.write(line)
+        self.show_results()
 
 
-    def actual_filter_code_take_2(self):
+    def just_revised(self):
         """
-        Method #2: Load the whole contents of the stream into memory (e.g. if a look-ahead is required)
+        This does the actual work for the LATEST command.
         """
+        # Example of another method: Load the whole contents of the stream into memory (e.g. if a look-ahead is required)
         lines = sys.stdin.readlines()
         new_text = []
         for index, line in enumerate(lines):
@@ -58,10 +54,11 @@ class {{ cookiecutter.tool_name_camel_case }}Filter(AbstractContextManager):
             # TODO Process line here
             new_text.append(line)
         sys.stdout.writelines(new_text)
+        self.show_results()
 
 
     def close(self):
-        # do something else here, if needed
+        # do something here (release resources used, etc.), if needed.
         pass
 
 

@@ -2,35 +2,34 @@
 
 == Logging
 
-Messages regarding how the data processing is going are sent to two places: 
-A detailed log is written to a file on disk. 
+Messages regarding how the data processing is going can be sent to two places: 
 A succinct log is sent to the console (to `stderr` to be precise).
+An optional detailed log can be written to a file on disk. 
 
-The default name of the log file is {{ cookiecutter.tool_name_slug }}.log.
-Use the `--filename` switch to specify a different name. 
-Use the `--nologfile` switch to suppress it altogether.
+Use the `--logfile` switch to specify the name of a log file to use. 
 
-By default, the version of the log written to the console (stderr) excludes diagnostic and debugging messages.
-Use the `--verbose`, `--debug`, or `--trace` see more.
+By default, the version of the log written to the console (`stderr`) excludes diagnostic and debugging messages.
+Use the `--verbose`, `--debug`, or `--trace` switches to see more.
 (`--debug` is very verbose. `--trace` is very, very verbose.)
 
 Log messages sent to the console are colorized by default. 
 The `--nocolor` switch turns this off.
-Also, if `stderr` is piped away from the console, then coloring is automatically turned off.
+Also, if `stderr` is redirected away from the console, then coloring is automatically turned off.
 
 == Command Line Switches
 
-* Use `--help` (or `-h`) to get a summary of the switches available.
+* Use `--help` to get a summary of the switches available.
 * Use `--version` to see what version of this tool is installed.
-* Use `--infile` (or `-i`) to specify the name (and path) for the input (instead of stdin).
-* Use `--outfile` (or `-o`) to specify the name (and path) for the output (instead of stdout).
-* Use `--logfile` (or `-l`), `--nologfile` to rename or turn of the log file.
-* Use `--configfile` (or `-c`) to specify the name (and path) for the configuration file (instead of ./{{ cookiecutter.tool_name_slug }}.ini).
-* Use `--verbose` (or `-v`), `--debug`, `--trace` to increase how mush information is sent to the console.
+* Use `--infile` (or `-i`) to specify the name (and path) for the input (instead of `stdin`).
+* Use `--outfile` (or `-o`) to specify the name (and path) for the output (instead of `stdout`).
+* Use `--logfile` (or `-l`) to send a super-verbose log to a file.
+* Use `--configfile` (or `-c`) to specify the name (and path) of a configuration file.
+* Use `--verbose` (or `-v`), `--debug`, `--trace` to increase how much information is sent to the console.
 * Use `--nocolor` if you don't like how messages sent to the console are colorized.
 * Use `--devel` (or `-d`) to turn on "`development mode.`" 
 
 == Configuration
 
-This tool will look for a configuration file called {{ cookiecutter.tool_name_slug }}.ini in the current directory.
-Use `--configfile` (or `-c`) on the command line to specify an alternate name and/or path.
+An optional configuration file can be specified via the `--configfile` switch.
+This file needs to be in standard INI file format.
+

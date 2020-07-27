@@ -10,27 +10,66 @@ This is a command line "`filter`" tool.
 That means it takes data from `stdin`, processes it, and writes it back out to `stdout`. 
 Along the way, any diagnostic info and/or error messages are written to `stderr`.
 
+*Piping syntax:*
+
+[width="100%",cols=""]
+|===
+| command > filename                 | Redirects the command's output (`stdout`) to a file (over-writes)
+| command >> filename                | APPENDs the command's output (`stdout`) to a file
+| command < filename                 | The command takes input from the named file (via `stdin`)
+| commandA #|# commandB              | "`Pipes`" the output (`stdout`) from commandA into commandB (as its `stdin`)
+| command 2> filename                | Redirects any error messages (`stderr`) into a file
+| command 2>> filename               | Appends any error messages (`stderr`) to a file
+| command > fileA 2> fileB           | Redirects output (`stdout`) to fileA and redirects any error messages (`stderr`) to fileB
+| command > file 2>&1                | Redirects output (`stdout`) to a file and redirects any error messages (`stderr`) into the same file (inter-woven)
+| command 2> nul                     | Suppresses error messages by sending them nowhere
+| command >nul 2>&1                  | Suppresses both the output and any error messages by sending them nowhere
+| command >filename 2> nul           | Redirects output to file but suppress any errors
+|===
+
+*Testing the Exit Codes:*
+
+[width="100%",cols=""]
+|===
+| commandA & commandB                | Run commandA and then run commandB (without piping)
+| commandA && commandB               | Run commandA, if it succeeds then run commandB
+| commandA #||# commandB             | Run commandA, if it fails then run commandB
+| commandA && commandB #||# commandC | If commandA succeeds run commandB, but if it fails run commandC
+|===
+
+An Exit Code of 0 (zero) means success.
+Any other Exit Code means failure.
+
 The general pattern of use is:
 
 [source,bash]
 ----
-type originalfile.txt > {{ cookiecutter.tool_name_slug }} > another-filter-tool > newfile.txt
+type originalfile.txt | {{ cookiecutter.tool_name_slug }} | another-filter-tool | type
+type originalfile.txt | {{ cookiecutter.tool_name_slug }} | another-filter-tool > newfile.txt
 ----
 
-The `type` command (in Windows) is a dead-simple command takes reads the contents of the named file and pumps it into  `stdout`. (Out from the perspective of the `type` command.) This is just an example. There are any number of commands/tools that could start off the filter chain.
+The `type` command (in Windows) is a dead-simple command that reads the contents of the named file and pumps it into `stdout`. 
+(In fact, the `<` notation is just a shortcut for invoking the type command.
+So, `type file | command` and `command < file` mean the exact same thing.)
+Using `type` is just an example. 
+There are any number of commands/tools that could start off the filter chain.
 
-The `>` symbol says to take the `stdout` from the previous tool (`type`) and pump in into the `stdin` for the next tool, `{{ cookiecutter.tool_name_slug }}` in this case.
+The `|` symbol says to take the `stdout` from the previous tool (`type`) and pipe in into the `stdin` for the next tool, `{{ cookiecutter.tool_name_slug }}` in this case.
 
 Our tool then takes what it gets through `stdin`, filters it, and writes the processed data to `stdout`.
 
-The second `>` symbol says to take the `stdout` from our tool and send it on to the `stdin` of the next item in the chain.
-As shown, the next item could be another tool (a sorting tool, a search-and replace tool, a word counting tool, etc.), or it could just be the name of a file that the operating system will create.
+The second `|` symbol says to take the `stdout` from our tool and send it on to the `stdin` of the next command in the chain (e.g. a sorting tool, a search-and replace tool, a word counting tool, etc.)
+
+In the first example, we pipe the final output to the type command, which sends it to the console.
+In the second example, we write the final output to newfile.txt.
 
 == How `stderr` Comes into Play
 
-If our tool needs to convey some information about what it's doing, it'll send those messages down a separate pipe known as `stderr`. (`stderr` is really misnamed. It should be something like "`stdinfo`" since it can communicate more information than just errors.)
+If our tool needs to convey some information about what it's doing, it'll send those messages down a separate channel known as `stderr`. 
+(`stderr` is really misnamed. 
+It should be something like "`stdinfo`" since it can communicate more information than just errors.)
 
-By default, messages that are sent down the `stderr` pipe go directly to the console.
+By default, messages that are sent down the `stderr` channel go directly to the console.
 But that assumes that you are watching it run.
 You could be running this tool unattended.
 In that case, you'll want to redirect `stderr` somewhere else.
@@ -48,15 +87,14 @@ BTW, `>` is shorthand for `1>`. They mean the same thing. 1 refers to `stdout`. 
 On occasion, you might want to combine `stdout` and `stderr` on purpose.
 That way, the diagnostic messages will be interwoven with the processed data and you'll be able to see at what point in the processing the errors/warnings occur.
 
-To do this, there's a special notation to the combine the `stdout` pipe (#1) with the `stderr` pipe (#2).
+To do this, there's a special notation to the combine the `stdout` channel (#1) with the `stderr` channel (#2).
 
 [source,bash]
 ----
 type originalfile.txt > {{ cookiecutter.tool_name_slug }} 1> combined.txt 2>&1
 ----
 
-The `&1` says to take the `stderr` pipe and just send the information to the same place that `1>` is sending the `stdout` data (namely, `combined.txt`).
-
+The `&1` says to take the `stderr` channel and just send the information to the same place that `1>` is sending the `stdout` data (namely, `combined.txt`).
 
 Another option is if you don't care about the `stderr` pipe at all, then you can send it nowhere.
 

@@ -7,13 +7,16 @@
 |Authors         | Craig Jones (polyglot-jones)
 |Latest Version  | 0.0.1
 |Python versions | 3.6 or above
+|Dependencies    | The generated code requires: `pytest`, `typer` and `colorlog`.
 |===
 
 This project is a link:https://github.com/cookiecutter/cookiecutter[cookiecutter] template. 
 This template generates a skeleton Python app -- specifically, an app that's meant to be invoked via the command line.
-The "`filter`" part refers to a program that accepts input via stdin, processes it in some way, and then sends that processed data along to stdout. (And all non-data logging information is streamed to stderr.)
+The "`filter`" part refers to a program that accepts input via `stdin`, processes it in some way, and then sends that processed data along to `stdout`. (And all non-data logging information is streamed to `stderr`.)
 But, that's just a suggestion. 
-You can certainly have your command-line tool work any way you want.
+You can certainly have your tool work any way you want.
+
+NOTE: This template was developed on a Windows 10 box. Your mileage may vary.
 
 == Features and Characteristics of this Template
 
@@ -27,13 +30,12 @@ The root folder is `/myapp`. Within that are these files and subfolders:
 * myapp/logic/ -- The "`business logic`" code that actually performs the task at hand. This code is of great concern to whoever is wearing the subject-matter hat.
 * myapp/core/ -- "`Infrastructure code`" that supports the business logic. This code is of more concern to whoever is wearing the operations hat. This code knows a little bit about the task at hand, but doesn't get deep into the details.
 * myapp/util/ -- "`Utility code`" that has nothing to do with the task at hand, per se. (Consider this an incubator for code that might someday be extracted into a separate module for use by other apps.)
-* myapp/#__main__#.py -- The main body of the app. It parses the command line, loads the configuration (if any), sets up the logging, invokes your business logic, and then handles otherwise uncaught exceptions.
+* myapp/myapp.py -- The main body of the app. It parses the command line, loads the configuration (if any), sets up the logging, invokes your business logic, and then handles otherwise uncaught exceptions.
 * doc/ -- The user docs for your tool.
 * doc_technical/ -- Documentation aimed at yourself and possible collaborators.
 * tests/ -- The unit tests.
 * setup.py -- The beginnings of a setup.py (in case your app grows into a module worthy of submitting to PyPl).
-* requirements.txt -- Names the external Python modules that your app requires (just `colorlog` to start).
-
+* requirements.txt -- Names the external Python modules that your app requires.
 
 *Unit Testing:* 
 
@@ -44,15 +46,9 @@ The root folder is `/myapp`. Within that are these files and subfolders:
 * The standard Python `logging` mechanism is customized with two additional logging levels: DIAGNOSTIC and TRACE.
 Thus, it goes: critical, error, warning, info, DIAGNOSTIC, debug, TRACE. 
 
-* Two versions of the log are created. 
-A detailed log is written to disk. 
-A less noisy log is sent to the console (to `stderr` to be precise).
-
-* The version of the log that is saved to disk always includes all log messages at every level.
-
-* The default name of this log file is myapp.log (where myapp is the name (slug) for the tool being created.) 
-Use the `--filename` switch to specify a different name. 
-Use the `--nologfile` switch to suppress it altogether.
+* Two versions of the log can be created. 
+By default, a succinct log is sent to the console (to `stderr` to be precise).
+Optionally, a super-verbose log can be written to disk (using the `--filename` switch).
 
 * By default the version of the log written to the console (stderr) excludes DIAGNOSTIC, DEBUG and TRACE. 
 Use the `--verbose`, `--debug`, or `--trace` switches to set the console logging level to DIAGNOSTIC, DEBUG, or TRACE, respectively.
@@ -63,16 +59,18 @@ Also, if `stderr` is piped away from the console, then coloring is automatically
 
 *Command Line Switches:* 
 
-* The command line arguments are handled via the `argparse` module. This template includes a number of argument definitions to start:
-* `--help` (or `-h`) and `--version` are handled directly by `argparse`.
-* `--verbose` (or `-v`), `--debug`, `--trace`, `--logfile` (or `-l`), `--nologfile`, and `--nocolor` affect the logging (as described above).
+* The command line arguments are handled via the `typer` module. This template includes a number of argument definitions to start:
+* `--help` is handled directly by `typer`.
+* `--version` displays the version number.
+* `--verbose` (or `-v`), `--debug`, `--trace`, `--logfile` (or `-l`), and `--nocolor` affect the logging (as described above).
 * `--devel` (or `-d`) is intended to turn on "`dev mode.`" Use this however you like.
 * `--infile` (or `-i`) allows you to specify the name (and path) for the input (instead of stdin).
 * `--outfile` (or `-o`) allows you to specify the name (and path) for the output (instead of stdout).
+* `--configfile` allows you to specify the name (and path) of an optional config file (INI format).
 
 *Configuration and Settings:*
 
-* Configuration is handled via `configparser` (INI format).
+* The optional config file is handled via `configparser` (INI format).
 * This template distinguishes between "`configurations`" and "`settings.`" Configuration options are read-only. (The user must edit the INI file manually.) 
 * On the other hand, settings are read/write. (The app uses "`settings`" to save state between sessions.) Note: Filter tools rarely need to save state between sessions, so feel free to rip that part out, but just in case you are using this template as the basis for some other kind of tool, it's there if you need it.
 
@@ -80,7 +78,7 @@ Also, if `stderr` is piped away from the console, then coloring is automatically
 
 * There are a few custom Exception classes defined (e.g. MyAppConfigError), to get you started.
 * Each of these custom exceptions have an associated `exitcode` attribute. Any uncaught exception that makes it all the way back to main will cause the app to exit out. If the exception has an `exitcode` attribute, then that's the code that will be passed back to the operating system. Otherwise, it will return 1. (0 is a normal exit.)
-* Before exiting, the uncaught exception is automatically logged. If the exception has a `loglevel` attribute, then that's the level at which the exception is logged (ERROR, WARNING, etc.) Otherwise, it will be logged as CRITICAL.
+* Before exiting, the uncaught exception is automatically logged. If the exception has a `loglevel` attribute, then that's the level at which the exception is logged (ERROR, WARNING, etc.) Otherwise, it will be logged as ERROR.
 
 *Documentation:*
 

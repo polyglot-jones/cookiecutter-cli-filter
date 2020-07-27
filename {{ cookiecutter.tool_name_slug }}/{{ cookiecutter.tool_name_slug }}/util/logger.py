@@ -2,7 +2,8 @@
 import os, sys
 import logging
 import logging.handlers
-
+from typing import Optional
+from pathlib import Path
 from functools import lru_cache
 from colorlog import ColoredFormatter
 
@@ -38,14 +39,19 @@ SIMPLE_COLORED = ColoredFormatter("[ %(log_color)s*%(reset)s ] %(blue)s%(message
     )
 
 
-def logging_stub() -> logging.Logger:
-    return logging.getLogger("stub")
-
-
 @lru_cache(maxsize=32)
-def setup_logging(name="{{ cookiecutter.tool_name_slug }}", loglevel=logging.INFO, logfilename="{{ cookiecutter.tool_name_slug }}.log", nocolor=False):
+def setup_logging(name="{{ cookiecutter.tool_name_slug }}", loglevel=logging.INFO, logfile=: Optional[Path] = None, nocolor=False):
     """
-    Setup initial logging configuration
+    Setup initial logging configuration.
+    After calling this setup code, whevever you do a logging.getlogger(name), you'll get an enhanced logger that includes:
+
+    - An additional logging level called DIAGNOSTIC (between INFO and DEBUG)
+    - An additional logging level called TRACE (after DEBUG)
+    - A corresponding log.diagnostic() method
+    - A corresponding log.trace() method
+    - An enhanced log.exception() method -- same as calling log.error(e), execept in this version if there is an e.loglevel attribute, it will be used.
+    - A new log.uncaught() method -- same as log.exception(), but first calls log.error("The following ... should have been caught ...")
+    - Colorized console output (optional).
     """
     if not sys.stderr.isatty:
         nocolor = True
@@ -93,6 +99,17 @@ def setup_logging(name="{{ cookiecutter.tool_name_slug }}", loglevel=logging.INF
     logging.Logger.exception = per_exception
 
 
+    def uncaught(self, e:Exception, *args, **kws):  # pragma no cover
+        # Note: logger takes its '*args' as 'args'.
+        """
+        Same as exception(), except it first logs a note (at error level) that the error should have been caught earlier.
+        """
+        self.error(f"Uncaught error detected. There is no good reason why the following error wasn't handled earlier.")
+        self.per_exception(e)
+
+    logging.Logger.uncaught = uncaught
+
+
     logger = logging.getLogger(name)
     # This should always be set to the chattiest level (individual handlers can be set to be less chatty)
     logger.setLevel(TRACE)
@@ -110,12 +127,10 @@ def setup_logging(name="{{ cookiecutter.tool_name_slug }}", loglevel=logging.INF
     log_console.setLevel(loglevel)
     logger.addHandler(log_console)
 
-    if logfilename:
-        log_file = logging.FileHandler(filename=os.path.join(os.getcwd(), logfilename))
+    if logfile:
+        log_file = logging.FileHandler(logfile.resolve()))
         log_file.setFormatter(VERBOSE_FORMAT)
         logger.addHandler(log_file)
 
 
-__all__ = ("logging_stub",
-    "setup_logging",
-    "CRITICAL", "ERROR", "WARNING", "INFO", "DIAGNOSTIC", "DEBUG", "TRACE")
+__all__ = ("setup_logging", "CRITICAL", "ERROR", "WARNING", "INFO", "DIAGNOSTIC", "DEBUG", "TRACE")

@@ -1,6 +1,6 @@
 from {{ cookiecutter.tool_name_slug }}.core.exceptions import {{ cookiecutter.tool_name_camel_case }}Error
 import pytest, logging, sys, time
-from {{ cookiecutter.tool_name_slug }}.util.logger import setup_logging
+from {{ cookiecutter.tool_name_slug }}.util.logger import setup_logging, CRITICAL, ERROR, WARNING, INFO, DIAGNOSTIC, DEBUG, TRACE
 
 # Notes:
 # 1. The capsys fixture captures sys.stdout and sys.stderr for us

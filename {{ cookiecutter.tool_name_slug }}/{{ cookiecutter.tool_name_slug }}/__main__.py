@@ -1,93 +1,121 @@
-import os, sys, logging, pathlib
+import os, sys, logging
+from os import name
+from pathlib import Path
 from sys import stdin, stdout, stderr
+from typing import Optional
+import typer
 
 __package__ = str("{{ cookiecutter.tool_name_slug }}")
+__version__ = "{{ cookiecutter.project_version }}"
 
 from .core.command_line import parse_args
 from .core.exceptions import *
 from .core.config import Configuration
-from .util.logger import setup_logging, logging_stub
+from .util.logger import setup_logging, DIAGNOSTIC, DEBUG, TRACE, INFO
 from .logic.{{ cookiecutter.tool_name_slug }}_filter import {{ cookiecutter.tool_name_camel_case }}Filter
 
 # In case we try to post a logging message before logging is actually set up
-LOG = logging_stub()
+LOG = logging.getLogger("stub")
 
-def load_switches(args):
-    switches = parse_args(args)
-    if not switches:
-        # Exiting early. (This must have been a --help or --version call, so there's nothing more to do.)
-        sys.exit(0)
-    return switches
 
-def load_configuration(configfile) -> Configuration:
+# Typer handles the command-line-interface (CLI) for us by automatically
+# creating arguments and switches based on the arguments of main() and/or
+# any sub-command methods.
+# See the documentation in https://typer.tiangolo.com.
+app = typer.Typer()
+
+def load_configuration(configfile: Optional[Path]) -> Configuration:
     config = Configuration()
-    if configfile:
+    if configfile and configfile.is_file():
+        LOG.trace("Loading configuration file {configfile}")
         try:
-            config.setFromINIFile(pathlib.Path(configfile))
+            config.setFromINIFile(configfile)
             config.runtimeValidation()
         except {{ cookiecutter.tool_name_camel_case }}ConfigError as e:
             LOG.exception(e)
     return config
 
-def main(args):
-    """Main entry point allowing external calls
+def show_version(value: bool):
+    if value:
+        typer.echo(f"{{ cookiecutter.tool_name }} {__version__}")
+        raise typer.Exit(0)
 
-    Args:
-      args ([str]): command line parameter list
+@app.command()
+def count_lines(skip: bool = typer.Option(..., help = "Skips blanks lines")):
     """
+    Counts the lines of text.
+    """
+    try:
+        with {{ cookiecutter.tool_name_camel_case }}Filter() as filter_group:
+            filter_group.count_lines()
+    except {{ cookiecutter.tool_name_camel_case }}Error as e:
+        finish(e)
+    finish()
 
-    parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    sys.path.insert(1, parent_dir)
-    import {{ cookiecutter.tool_name_slug }}
+@app.command()
+def latest():
+    """
+    Filters out any lines that have been revised.
+    (That is, lines that are followed by a "Revision:" line.)
+    """
+    try:
+        with {{ cookiecutter.tool_name_camel_case }}Filter() as filter_group:
+            filter_group.just_revised()
+    except {{ cookiecutter.tool_name_camel_case }}Error as e:
+        finish(e)
+    finish()
 
+def finish(exception: Optional[Exception] = None):
+    LOG.trace("Finishing")
     exitcode = 0
-    SWITCHES = load_switches(args)
+    if exception:
+        exitcode = 1
+        if hasattr(exception, "exitcode"):
+            exitcode = exception.exitcode
+        LOG.uncaught(exception)
 
-    logfilename = ("" if SWITCHES.nologfile else SWITCHES.logfile)
-    setup_logging(name="{{ cookiecutter.tool_name_slug }}", loglevel = SWITCHES.loglevel, logfilename = logfilename, nocolor= SWITCHES.nocolor)
-    LOG = logging.getLogger("{{ cookiecutter.tool_name_slug }}")
-    LOG.diagnostic(f"SWITCHES.loglevel = {SWITCHES.loglevel}")
+    LOG.diagnostic(f"Exit code = {exitcode}")
+    raise typer.Exit(exitcode)
 
-    CONFIG = load_configuration(SWITCHES.configfile)
 
-    LOG.trace("Starting job...")
+# This common code is executed first, before any sub-command
+@app.callback()
+def main(
+    version: bool=typer.Option(None, "--version", callback=show_version, is_eager=True, help="Displays this tools's version number"),
+    infile: Path = typer.Option(None, "-i", "--infile", help="specifies the name (and path) for the input (instead of stdin)"),
+    outfile: Path = typer.Option(None, "-o", "--outfile", help="specifies the name (and path) for the output (instead of stdout)"),
+    logfile: Optional[Path] = typer.Option(None, "-l", "--logfile", help="specifies the name (and path) for the log file (none by default)"),
+    configfile: Optional[Path] = typer.Option(None, "-c", "--configfile", help="specifies the name (and path) for the configuration file (none by default)"),
+    verbose: bool=typer.Option(None, "-v", "--verbose", help="sets loglevel to DIAGNOSTIC"),
+    debug: bool=typer.Option(None, "--debug", help="sets loglevel to DEBUG (very verbose)"),
+    trace: bool = typer.Option(None, "--trace", help="sets loglevel to TRACE (very, very verbose)"),
+    nocolor: bool = typer.Option(None, "--nocolor", help="turns off coloring the log messages that are sent to the console"),
+    devmode: bool = typer.Option(None, "-d", "--devel", help="turns on developer mode")):
+    """
+    TODO: This awesome tool filters text in one of several ways.
+    (See the list of commands, below.)
+    But first, here are the various options available that are common to all of the commands:
+    """
+    loglevel = DIAGNOSTIC if verbose else DEBUG if debug else TRACE if trace else INFO
 
-    if SWITCHES.devmode:
+    setup_logging(name="{{ cookiecutter.tool_name_camel_case }}", loglevel = loglevel, logfile = logfile, nocolor = nocolor)
+    LOG = logging.getLogger("{{ cookiecutter.tool_name_camel_case }}")
+    LOG.diagnostic(f"loglevel = {loglevel}")
+
+    CONFIG = load_configuration(configfile)
+
+    if devmode:
         LOG.info("Running in dev mode.")
         # TODO special setup for dev mode (e.g. suppressing actual web service calls, not actually sending any emails)
 
-    if SWITCHES.infile:
-        sys.stdin = open(SWITCHES.infile, "r")
-        LOG.info(f"Input will be taken from {SWITCHES.infile}, rather than stdin.")
+    if infile:
+        sys.stdin = open(infile, "r")
+        LOG.info(f"Input will be taken from {infile}, rather than stdin.")
 
-    if SWITCHES.outfile:
-        sys.stdout = open(SWITCHES.outfile, "w")
-        LOG.info(f"Output will be written to {SWITCHES.outfile}, rather than stdout.")
-
-    try:
-        with JnlParserFilter() as f:
-            f.run()                                                           # TODO <-- here's the beef
-    except Exception as e:
-        LOG.exception(e)
-
-        exitcode = 1
-        if hasattr(e, "exitcode"):
-            if e.exitcode > 0:
-                exitcode = e.exitcode
-            else:
-                LOG.error("The warning exception above should have been caught and handled. Instead, it's causing this app to abort.")
-
-    LOG.trace("Script ending.")
-    LOG.diagnostic(f"Exit code = {exitcode}")
-    sys.exit(exitcode)
-
-
-
-def run():
-    """Entry point for console_scripts"""
-    # Throw away argv[0] which is this program's name ({{ cookiecutter.tool_name_slug }})
-    main(sys.argv[1:])
-
+    if outfile:
+        sys.stdout = open(outfile, "w")
+        LOG.info(f"Output will be written to {outfile}, rather than stdout.")
 
 if __name__ == "__main__":
-    run()
+    # The Typer app handles parsing the commad-line arguments and then dispatching the appropriate sub-command handler
+    app()

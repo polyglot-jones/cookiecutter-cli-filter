@@ -7,8 +7,8 @@ LOG = logging.getLogger("{{ cookiecutter.tool_name_slug }}")
 class {{ cookiecutter.tool_name_camel_case }}Filter(AbstractContextManager):
     """
     This is the heart of the {{ cookiecutter.tool_name }}.
-    (This being a context manager, means we can invoke it via a "with ... as" statement.)
     """
+    # This being a context manager, means we can invoke it via a "with ... as" statement.
     linecount = 0
     skipcount = 0
 
@@ -62,11 +62,12 @@ class {{ cookiecutter.tool_name_camel_case }}Filter(AbstractContextManager):
 
     def close(self):
         # do something else here, if needed
+        pass
 
 
     def __exit__(self, exception_type, exception, trace_back):
         """
-        This method is always called when the "with ... as" statement exits.
+        This method is called when the "with ... as" statement exits.
         """
         handled_here = False
         if exception:

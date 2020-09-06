@@ -1,8 +1,11 @@
+import argparse
 from contextlib import AbstractContextManager
 from {{ cookiecutter.tool_name_slug }}.core.exceptions import {{ cookiecutter.tool_name_camel_case }}Error
+from gwpycore import EX_OK
 import sys, logging
 
-LOG = logging.getLogger("{{ cookiecutter.tool_name_slug }}")
+LOG = logging.getLogger("main")
+CONFIG: argparse.Namespace
 
 class {{ cookiecutter.tool_name_camel_case }}Filter(AbstractContextManager):
     """
@@ -11,7 +14,7 @@ class {{ cookiecutter.tool_name_camel_case }}Filter(AbstractContextManager):
     # This being a context manager, means we can invoke it via a "with ... as" statement.
     linecount = 0
     skipcount = 0
-
+    commands = ["gui", "count", "latest"]
 
     def __init__(self):
         pass
@@ -21,8 +24,15 @@ class {{ cookiecutter.tool_name_camel_case }}Filter(AbstractContextManager):
         LOG.info(f"Number of lines processed = {self.linecount}")
         LOG.info(f"Of those, number of lines skipped = {self.skipcount}")
 
+    def dispatch(self, config: argparse.Namespace) -> int:
+        global CONFIG
+        CONFIG = config
+        if CONFIG.command not in self.commands:
+            raise {{ cookiecutter.tool_name_camel_case }}Error(f"Unexpected sub-command: '{CONFIG.command}'.")
+        return getattr(self, CONFIG.command)()
 
-    def command_one(self):
+
+    def count(self) -> int:
         """
         This example just counts the lines in a file.
         """
@@ -37,9 +47,9 @@ class {{ cookiecutter.tool_name_camel_case }}Filter(AbstractContextManager):
                 pass
             sys.stdout.write(line)
         self.show_results()
-
-
-    def command_two(self):
+        return EX_OK
+        
+    def latest(self) -> int:
         """
         This example filters out old/revised text.
         """
@@ -55,7 +65,7 @@ class {{ cookiecutter.tool_name_camel_case }}Filter(AbstractContextManager):
             new_text.append(line)
         sys.stdout.writelines(new_text)
         self.show_results()
-
+        return EX_OK
 
     def close(self):
         # TODO Maybe do something here (e.g. release resources used).

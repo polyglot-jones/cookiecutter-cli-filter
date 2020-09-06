@@ -6,9 +6,9 @@
     <file alias="copy.png">../resources/icons/copy.png</file>
     <file alias="cut.png">../resources/icons/cut.png</file>
     <file alias="date.png">../resources/icons/date.png</file>
-    <file alias="download.png">../resources/icons/download.png</file>
     <file alias="download_cloud.png">../resources/icons/download_cloud.png</file>
     <file alias="error.png">../resources/icons/error.png</file>
+    <file alias="exit.png">../resources/icons/exit.png</file>
     <file alias="find.png">../resources/icons/find.png</file>
     <file alias="font.png">../resources/icons/font.png</file>
     <file alias="full_screen.png">../resources/icons/full_screen.png</file>
@@ -32,6 +32,7 @@
     <file alias="view_source.png">../resources/icons/view_source.png</file>
     <file alias="warning.png">../resources/icons/warning.png</file>
     <file alias="wrap.png">../resources/icons/wrap.png</file>
+    <file alias="{{ cookiecutter.tool_name_slug }}_icon.ico">../resources/icons/{{ cookiecutter.tool_name_slug }}_icon.ico</file>
   </qresource>
 </RCC>
 

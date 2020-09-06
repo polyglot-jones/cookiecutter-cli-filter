@@ -3,7 +3,7 @@ import configparser
 import logging
 from pathlib import Path
 
-from gwpycore import parse_config, as_path
+from gwpycore import parse_config
 
 LOG = logging.getLogger("main")
 
@@ -19,27 +19,25 @@ def __storage_section(parser, config):
         config.imagesDir = parser["storage"].getpath("imagesDir", config.imagesDir)
 
 
-def load_config(SWITCHES, ini: str = "", config: argparse.Namespace = None) -> argparse.Namespace:
+def load_config(configfile, ini: str = "", initial_config: argparse.Namespace = None) -> argparse.Namespace:
     """
     Parse the contents of the config (INI) file.
 
     Args:
-      ini (optional) -- If not blank, than this text will be parsed, instead of the contents of SWITCHES.configfile.
-      config (optional) -- An existing argparse.Namespace to be appended to
+        ini -- (optional) If not blank, than this text will be parsed, instead of the
+                contents of configfile.
+        config -- (optional) An existing argparse.Namespace to be appended to (typically
+                the command line args, so that all of the config settings are in one place).
 
     Returns:
-      An object of type argparse.Namespace. Access the settings as object attributes (e.g. config.datum).
+      An object of type argparse.Namespace. Access the settings like object attributes (e.g. config.datum).
     """
     LOG.trace("Loading config")
-    LOG.debug(f"SWITCHES = {SWITCHES}")
-    parser = parse_config(LOG, configfile=Path(SWITCHES.configfile), ini=ini)
-
-    if not config:
-        config = argparse.Namespace()
+    parser = parse_config(LOG, configfile=Path(configfile), ini=ini)
+    config = initial_config if initial_config else argparse.Namespace()
 
     # issues = []
     __storage_section(parser, config)
-
     # for issue in issues:
     #     LOG.exception(issue)
 

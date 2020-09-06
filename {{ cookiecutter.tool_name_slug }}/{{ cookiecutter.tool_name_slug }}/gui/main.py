@@ -1,17 +1,21 @@
-from PyQt5 import uic
-from pathlib import Path
+import argparse
+import subprocess
 import sys
+import logging
+from pathlib import Path
+from PyQt5 import uic
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QAction, QApplication, QFileDialog, QMainWindow
-from gwpycore import inform_user_about_issue
-import logging
+from gwpycore import ICON_INFO, inform_user_about_issue
+import {{ cookiecutter.tool_name_slug }}.gui.main_ui_rc
 
 LOG = logging.getLogger("main")
+CONFIG: argparse.Namespace
 
 BUG_REPORT_URL = "https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}/issues/"
 HELP_URL = "https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}"
 
-(DialogSpec, BaseClass) = uic.loadUiType("{{ cookiecutter.tool_name_slug }}\\gui\\editor.ui", from_imports=True, import_from="{{ cookiecutter.tool_name_slug }}.gui")
+(DialogSpec, BaseClass) = uic.loadUiType("{{ cookiecutter.tool_name_slug }}\\gui\\main.ui", from_imports=True, import_from="{{ cookiecutter.tool_name_slug }}.gui")
 
 
 class {{ cookiecutter.tool_name_slug }}Window(BaseClass, DialogSpec):
@@ -19,17 +23,16 @@ class {{ cookiecutter.tool_name_slug }}Window(BaseClass, DialogSpec):
     Main window for the desktop app.
     """
 
-    def __init__(self, parent, switches, config):
+    def __init__(self, parent, config):
         LOG.trace("Enter: {{ cookiecutter.tool_name_slug }}Window __init__")
         BaseClass.__init__(self)
         DialogSpec.__init__(self)
         self.parent = parent
-        global SWITCHES, CONFIG
-        SWITCHES = switches
+        global CONFIG
         CONFIG = config
         self.setupUi(self)
 
-        self.setWindowIcon(QIcon('{{ cookiecutter.tool_name_slug }}/resources/{{ cookiecutter.tool_name_slug }}_icon.png'))
+        self.setWindowIcon(QIcon(':/main_ui/{{ cookiecutter.tool_name_slug }}_icon.ico'))
 
         self.connect_actions()
         self.statusBar()
@@ -61,17 +64,22 @@ class {{ cookiecutter.tool_name_slug }}Window(BaseClass, DialogSpec):
         path = Path(name)
         with path.open("rt") as input_file:
             # TODO Use input_file here
+            pass
 
     def file_save(self):
         name,_ = QFileDialog.getSaveFileName(self, 'Save File')
         path = Path(name)
         with path.open("wt") as output_file:
             # TODO output_file.write(???)
+            pass
 
     def file_save_as(self):
         pass
 
     def find(self):
+        pass
+
+    def font_choice(self):
         pass
 
     def help(self):

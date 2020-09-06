@@ -14,8 +14,8 @@ help: # If you just say `make`, then this first target is assumed as the goal
 	@type doc_technical\makefile_help.txt
 
 clean: clean-pyc # Deletes all temporary files
-	del /Q /F /S build\
-	del /Q /F /S dist\
+	del /Q /F /S build
+	del /Q /F /S dist
 	del /Q /F /S *.pyo
 	del /Q /F /S *.egg-info
 

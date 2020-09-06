@@ -1,0 +1,20 @@
+== One-Time Setup Goals ==
+    activate     -- Installs and activates the virtual environment.
+    dev-env      -- Installs gwpycore and all other requirements, etc.
+    qt-designer  -- Installs the QT-designer tool.
+
+== Regular Goals ==
+    test        -- Runs all of the unit tests.
+    standardize -- Apply the linting tools (format, isort, and lint) to all of the .py files.
+    dist        -- Build a distribution.
+	rcc         -- Compile main_ui.qrc.
+    clean       -- Deletes all temporary files.
+    help        -- This list.
+
+== Sub-Goals (can be executed explicitly, if desired) ==
+    pip          -- Upgrade pip to the latest
+    gwpycore     -- Clones the gwpycore source code and installs it (symlink-ish).
+    requirements -- Ensures that all of the modules required by this project are installed (in the virtual env).
+    format       -- Re-formats all of the Python code (with black).
+    isort        -- Cleans up all of the imports (using isort).
+    lint         -- Lints code (using flake8).

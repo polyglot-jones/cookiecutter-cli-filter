@@ -35,7 +35,7 @@ import re
 import os
 import sys
 import codecs
-import pathlib
+from pathlib import Path
 
 from os.path import dirname, join
 from setuptools import setup, find_packages
@@ -49,7 +49,7 @@ if sys.version_info < (3, 6,):
 #
 # Get version software version
 #
-version_file = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), "{{ cookiecutter.tool_name_slug }}")), '__init__.py')
+version_file = Path(__file__).parent / "{{ cookiecutter.tool_name_slug }}/__init__.py"
 with codecs.open(version_file, 'r', 'latin1') as fp:
     try:
         version = re.findall(r"^__version__ = ['\"]([^']+)['\"]\r?$",
@@ -58,16 +58,16 @@ with codecs.open(version_file, 'r', 'latin1') as fp:
         raise RuntimeError('Unable to determine version.')
 
 
-with (pathlib.Path(__file__) / 'requirements.txt').open("rt") as f:
+with (Path(__file__).parent / 'requirements.txt').open("rt") as f:
     required = f.read().splitlines()
 
-with (pathlib.Path(__file__) / 'requirements-performance.txt').open("rt") as f:
-    required_performance = f.read().splitlines()
+# with (Path(__file__).parent / 'requirements-performance.txt').open("rt") as f:
+#     required_performance = f.read().splitlines()
 
-#with (pathlib.Path(__file__) / 'requirements-runtest.txt').open("rt") as f:
+#with (Path(__file__).parent / 'requirements-runtest.txt').open("rt") as f:
 #    required_test = f.read().splitlines()
 
-with (pathlib.Path(__file__) / 'README.adoc').open("rt") as f:
+with (Path(__file__).parent / 'README.adoc').open("rt") as f:
     long_description = f.read()
 
 
@@ -95,9 +95,7 @@ setup(
     packages=find_packages("{{ cookiecutter.tool_name_slug }}",
                            exclude=["tests", "doc", "doc_technical"]),
     include_package_data=True,
-    extras_require={
-        'performance':  required_performance
-    },
+    # extras_require={'performance':  required_performance},
     entry_points={'console_scripts': [
         '{{ cookiecutter.tool_name_slug | replace("_", "-") }} = {{ cookiecutter.tool_name_slug }}',
     ]},

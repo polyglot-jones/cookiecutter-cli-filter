@@ -1,13 +1,37 @@
 <RCC>
   <qresource prefix="main_ui">
-    <file alias="open.png">../resources/icons/open.png</file>
-    <file alias="save.png">../resources/icons/save.png</file>
     <file alias="about.png">../resources/icons/about.png</file>
-    <file alias="font.png">../resources/icons/font.png</file>
     <file alias="close.png">../resources/icons/close.png</file>
-    <file alias="save.png">../resources/icons/save.png</file>
+    <file alias="colors.png">../resources/icons/colors.png</file>
+    <file alias="copy.png">../resources/icons/copy.png</file>
+    <file alias="cut.png">../resources/icons/cut.png</file>
+    <file alias="date.png">../resources/icons/date.png</file>
+    <file alias="download.png">../resources/icons/download.png</file>
+    <file alias="download_cloud.png">../resources/icons/download_cloud.png</file>
+    <file alias="error.png">../resources/icons/error.png</file>
+    <file alias="find.png">../resources/icons/find.png</file>
+    <file alias="font.png">../resources/icons/font.png</file>
+    <file alias="full_screen.png">../resources/icons/full_screen.png</file>
+    <file alias="hashtag.png">../resources/icons/hashtag.png</file>
     <file alias="help.png">../resources/icons/help.png</file>
-    <file alias="print.png">../resources/icons/print.png</file>
+    <file alias="image.png">../resources/icons/image.png</file>
+    <file alias="info.png">../resources/icons/info.png</file>
+    <file alias="merge.png">../resources/icons/merge.png</file>
+    <file alias="new.png">../resources/icons/new.png</file>
+    <file alias="open.png">../resources/icons/open.png</file>
+    <file alias="paste.png">../resources/icons/paste.png</file>
     <file alias="preview.png">../resources/icons/preview.png</file>
+    <file alias="print.png">../resources/icons/print.png</file>
+    <file alias="redo.png">../resources/icons/redo.png</file>
+    <file alias="rename.png">../resources/icons/rename.png</file>
+    <file alias="report_bug.png">../resources/icons/report_bug.png</file>
+    <file alias="save.png">../resources/icons/save.png</file>
+    <file alias="select_all.png">../resources/icons/select_all.png</file>
+    <file alias="time.png">../resources/icons/time.png</file>
+    <file alias="undo.png">../resources/icons/undo.png</file>
+    <file alias="view_source.png">../resources/icons/view_source.png</file>
+    <file alias="warning.png">../resources/icons/warning.png</file>
+    <file alias="wrap.png">../resources/icons/wrap.png</file>
   </qresource>
 </RCC>
+

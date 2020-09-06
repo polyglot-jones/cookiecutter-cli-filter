@@ -71,6 +71,7 @@ def main():
 
     try:
         CONFIG = load_config(SWITCHES)
+        CONFIG.version = __version__
         further_initialization()
         x = start_gui(SWITCHES, CONFIG)
         finish(exitcode=x)

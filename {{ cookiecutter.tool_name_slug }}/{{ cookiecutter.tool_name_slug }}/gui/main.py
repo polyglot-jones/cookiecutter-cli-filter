@@ -3,10 +3,13 @@ from pathlib import Path
 import sys
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QAction, QApplication, QFileDialog, QMainWindow
+from gwpycore import inform_user_about_issue
 import logging
 
 LOG = logging.getLogger("main")
 
+BUG_REPORT_URL = "https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}/issues/"
+HELP_URL = "https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.github_repo }}"
 
 (DialogSpec, BaseClass) = uic.loadUiType("{{ cookiecutter.tool_name_slug }}\\gui\\editor.ui", from_imports=True, import_from="{{ cookiecutter.tool_name_slug }}.gui")
 
@@ -26,11 +29,32 @@ class {{ cookiecutter.tool_name_slug }}Window(BaseClass, DialogSpec):
         CONFIG = config
         self.setupUi(self)
 
-        self.setWindowIcon(QIcon('{{ cookiecutter.tool_name_slug }}/assets/{{ cookiecutter.tool_name_slug }}_icon.png'))
+        self.setWindowIcon(QIcon('{{ cookiecutter.tool_name_slug }}/resources/{{ cookiecutter.tool_name_slug }}_icon.png'))
 
         self.connect_actions()
         self.statusBar()
 
+
+    def about(self):
+        inform_user_about_issue(message=f"{{ cookiecutter.tool_name }}\nVersion {CONFIG.version}", icon = ICON_INFO, title="About", parent=self)
+
+    def bug(self):
+        subprocess.run(['open', BUG_REPORT_URL], check=True)
+
+    def copy(self):
+        pass
+
+    def cut(self):
+        pass
+
+    def full_screen(self):
+        pass
+
+    def file_close(self):
+        pass
+
+    def file_new(self):
+        pass
 
     def file_open(self):
         name,_ = QFileDialog.getOpenFileName(self, 'Open File', directory=CONFIG.dataDir)
@@ -44,39 +68,64 @@ class {{ cookiecutter.tool_name_slug }}Window(BaseClass, DialogSpec):
         with path.open("wt") as output_file:
             # TODO output_file.write(???)
 
+    def file_save_as(self):
+        pass
+
+    def find(self):
+        pass
+
+    def help(self):
+        subprocess.run(['open', HELP_URL], check=True)
+
+    def paste(self):
+        pass
+
+    def preview(self):
+        pass
+
     def print(self):
         pass
 
-    def page_setup(self):
+    def redo(self):
+        pass
+
+    def select_all(self):
+        pass
+
+    def undo(self):
+        pass
+
+    def updates(self):
+        pass
+
+    def wrap_text(self):
         pass
 
     def connect_actions(self):
-        # self.action_About.triggered.connect(self.)
-        # self.action_AsciiDoc_View.triggered.connect(self.)
-        # self.action_Bug.triggered.connect(self.)
-        self.action_Close.triggered.connect(self.close_application)
-        # self.action_Copy.triggered.connect(self.)
-        # self.action_Cut.triggered.connect(self.)
-        # self.action_Distraction_Free.triggered.connect(self.)
-        # self.action_Exit.triggered.connect(self.)
-        # self.action_Find.triggered.connect(self.)
+        self.action_About.triggered.connect(self.about)
+        self.action_Bug.triggered.connect(self.bug)
+        self.action_Close.triggered.connect(self.file_close)
+        self.action_Exit.triggered.connect(self.close_application)
+        self.action_Copy.triggered.connect(self.copy)
+        self.action_Cut.triggered.connect(self.cut)
+        self.action_Full_Screen.triggered.connect(self.full_screen)
+        self.action_Find.triggered.connect(self.find)
         self.action_Font.triggered.connect(self.font_choice)
-        # self.action_Help.triggered.connect(self.)
-        # self.action_New.triggered.connect(self.)
+        self.action_Help.triggered.connect(self.help)
+        self.action_New.triggered.connect(self.file_new)
         self.action_Open.triggered.connect(self.file_open)
-        # self.action_Paste.triggered.connect(self.)
+        self.action_Paste.triggered.connect(self.paste)
         self.action_Print.triggered.connect(self.print)
-        # self.action_Print_Preview.triggered.connect(self.preview)
-        # self.action_Redo.triggered.connect(self.)
+        self.action_Print_Preview.triggered.connect(self.preview)
+        self.action_Redo.triggered.connect(self.redo)
         self.action_Save.triggered.connect(self.file_save)
-        self.action_Save_As.triggered.connect(self.file_save)
-        # self.action_Select_All.triggered.connect(self.)
-        # self.action_Undo.triggered.connect(self.)
-        # self.action_Updates.triggered.connect(self.)
-        # self.action_Wrap_Text.triggered.connect(self.)
+        self.action_Save_As.triggered.connect(self.file_save_as)
+        self.action_Select_All.triggered.connect(self.select_all)
+        self.action_Undo.triggered.connect(self.undo)
+        self.action_Updates.triggered.connect(self.updates)
+        self.action_Wrap_Text.triggered.connect(self.wrap_text)
 
 
     def close_application(self):
         self.close()
-
 

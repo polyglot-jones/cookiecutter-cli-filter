@@ -16,10 +16,13 @@ from gwpycore import (
     normalizeName,
     setup_logging,
 )
+from sys import stdin, stdout, stderr
+from .core.exceptions import *
+from .core.{{ cookiecutter.tool_name_slug }}_filter import {{ cookiecutter.tool_name_camel_case }}Filter
 from {{ cookiecutter.tool_name_slug }}.gui.main import {{ cookiecutter.tool_name_slug }}Window
 import argparse
 
-__version__ = "0.0.1"
+__version__ = "{{ cookiecutter.project_version }}"
 
 # In case we try to post a logging message before logging is actually set up
 LOG = logging.getLogger("stub")
@@ -45,27 +48,37 @@ def further_initialization():
 
 def finish(exitcode=0, exception: Optional[Exception] = None):
     LOG.trace("Finishing")
-
     if exception:
         exitcode = 1
         if hasattr(exception, "exitcode"):
             exitcode = exception.exitcode
         LOG.uncaught(exception)
-
     LOG.diagnostic(f"Exit code = {exitcode}")
 
 
-def start_gui(SWITCHES, CONFIG) -> int:
+def run_gui():
     LOG.trace("Starting up the GUI")
     q_app = QApplication(sys.argv)
     GUI = {{ cookiecutter.tool_name_slug }}Window(q_app, SWITCHES, CONFIG)
     GUI.show()
-    return q_app.exec_()
+    x = q_app.exec_()
+    finish(exitcode=x)
+
+
+def run_headless(command: str):
+    with {{ cookiecutter.tool_name_camel_case }}Filter() as filter_group:
+        if SWITCHES.command == "filter-one":
+            x = filter_group.command_one()
+        elif SWITCHES.command == "filter-two":
+            x = filter_group.command_two()
+        else:
+            raise {{ cookiecutter.tool_name_camel_case }}Error(f"Unexpected sub-command: '{SWITCHES.command}'.")
+    finish(exitcode=x)
 
 
 def main():
     global SWITCHES, CONFIG, LOG
-    SWITCHES = load_command_line(sys.argv[1:])
+    SWITCHES = load_command_line(__version__, sys.argv[1:])
     LOG = setup_logging(loglevel=SWITCHES.loglevel, logfile=SWITCHES.logfile, nocolor=SWITCHES.nocolor)
     LOG.trace("(Previously) Loaded command line and set up logging.")
 
@@ -73,8 +86,11 @@ def main():
         CONFIG = load_config(SWITCHES)
         CONFIG.version = __version__
         further_initialization()
-        x = start_gui(SWITCHES, CONFIG)
-        finish(exitcode=x)
+
+        if SWITCHES.command == "gui":
+            run_gui()
+        else:
+            run_headless()
     except Exception as e:
         finish(exception=e)
 

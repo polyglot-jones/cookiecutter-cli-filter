@@ -22,9 +22,9 @@ class {{ cookiecutter.tool_name_camel_case }}Filter(AbstractContextManager):
         LOG.info(f"Of those, number of lines skipped = {self.skipcount}")
 
 
-    def count_lines(self):
+    def command_one(self):
         """
-        This does the actual work for the COUNT-LINES command.
+        This example just counts the lines in a file.
         """
         # Example of one method: Process the stream (efficiently) line-by-line
         for line in sys.stdin.readlines():
@@ -39,9 +39,9 @@ class {{ cookiecutter.tool_name_camel_case }}Filter(AbstractContextManager):
         self.show_results()
 
 
-    def just_revised(self):
+    def command_two(self):
         """
-        This does the actual work for the LATEST command.
+        This example filters out old/revised text.
         """
         # Example of another method: Load the whole contents of the stream into memory (e.g. if a look-ahead is required)
         lines = sys.stdin.readlines()
@@ -58,7 +58,7 @@ class {{ cookiecutter.tool_name_camel_case }}Filter(AbstractContextManager):
 
 
     def close(self):
-        # do something here (release resources used, etc.), if needed.
+        # TODO Maybe do something here (e.g. release resources used).
         pass
 
 
@@ -72,3 +72,5 @@ class {{ cookiecutter.tool_name_camel_case }}Filter(AbstractContextManager):
             handled_here = True
         self.close()
         return handled_here
+
+__all__ = ("{{ cookiecutter.tool_name_camel_case }}Filter",)

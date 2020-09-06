@@ -55,12 +55,12 @@ def finish(exitcode=0, exception: Optional[Exception] = None):
     LOG.diagnostic(f"Exit code = {exitcode}")
 
 
-def run_gui():
+def run_gui() -> int:
     LOG.trace("Starting up the GUI")
     q_app = QApplication([])
     gui = {{ cookiecutter.tool_name_camel_case }}Window(q_app, CONFIG)
     gui.show()
-    x = q_app.exec_()
+    return q_app.exec_()
 
 
 def main():
@@ -76,6 +76,7 @@ def main():
 
         if CONFIG.command == "gui":
             xcode = run_gui()
+        else:
             with {{ cookiecutter.tool_name_camel_case }}Filter() as filter_group:
                 xcode = filter_group.dispatch(CONFIG)
         finish(exitcode=xcode)

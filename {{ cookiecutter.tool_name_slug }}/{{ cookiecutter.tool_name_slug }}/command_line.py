@@ -12,7 +12,6 @@ def load_command_line(version: str, args) -> Namespace:
     """
     parser: ArgumentParser = basic_cli_parser(
         version_text=version,
-        command=True,
         devel=True,
         trace=True,
         infile=True,

@@ -18,7 +18,7 @@ HELP_URL = "https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.gi
 (DialogSpec, BaseClass) = uic.loadUiType("{{ cookiecutter.tool_name_slug }}\\gui\\main.ui", from_imports=True, import_from="{{ cookiecutter.tool_name_slug }}.gui")
 
 
-class {{ cookiecutter.tool_name_slug }}Window(BaseClass, DialogSpec):
+class {{ cookiecutter.tool_name_camel_case }}Window(BaseClass, DialogSpec):
     """
     Main window for the desktop app.
     """

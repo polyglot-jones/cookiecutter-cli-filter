@@ -19,7 +19,7 @@ from gwpycore import (
 from sys import stdin, stdout, stderr
 from {{ cookiecutter.tool_name_slug }}.core.exceptions import {{ cookiecutter.tool_name_camel_case }}Error
 from {{ cookiecutter.tool_name_slug }}.core.{{ cookiecutter.tool_name_slug }}_filter import {{ cookiecutter.tool_name_camel_case }}Filter
-from {{ cookiecutter.tool_name_slug }}.gui.main import {{ cookiecutter.tool_name_slug }}Window
+from {{ cookiecutter.tool_name_slug }}.gui.main import {{ cookiecutter.tool_name_camel_case }}Window
 import argparse
 
 __version__ = "{{ cookiecutter.project_version }}"

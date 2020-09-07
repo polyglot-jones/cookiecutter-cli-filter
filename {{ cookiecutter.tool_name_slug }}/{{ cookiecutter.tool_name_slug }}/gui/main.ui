@@ -203,6 +203,11 @@
    <property name="text"><string>&amp;Find</string></property>
    <property name="shortcut"><string>Ctrl+F</string></property>
   </action>
+  <action name="action_Font">
+   <property name="icon"><iconset resource="main_ui.qrc">
+    <normaloff>:/main_ui/font.png</normaloff>:/main_ui/font.png</iconset></property>
+   <property name="text"><string>&amp;Font</string></property>
+  </action>
   <action name="action_Full_Screen">
    <property name="icon"><iconset resource="main_ui.qrc">
     <normaloff>:/main_ui/full_screen.png</normaloff>:/main_ui/full_screen.png</iconset></property>

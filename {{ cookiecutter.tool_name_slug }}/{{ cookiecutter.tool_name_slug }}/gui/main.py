@@ -61,17 +61,19 @@ class {{ cookiecutter.tool_name_camel_case }}Window(BaseClass, DialogSpec):
 
     def file_open(self):
         name,_ = QFileDialog.getOpenFileName(self, 'Open File', directory=CONFIG.dataDir)
-        path = Path(name)
-        with path.open("rt") as input_file:
-            # TODO Use input_file here
-            pass
+        if name:
+            path = Path(name)
+            with path.open("rt") as input_file:
+                # TODO Use input_file here
+                pass
 
     def file_save(self):
-        name,_ = QFileDialog.getSaveFileName(self, 'Save File')
-        path = Path(name)
-        with path.open("wt") as output_file:
-            # TODO output_file.write(???)
-            pass
+        name, _ = QFileDialog.getSaveFileName(self, 'Save File', directory=str(CONFIG.dataDir))
+        if name:
+            path = Path(name)
+            with path.open("wt") as output_file:
+                # TODO output_file.write(???)
+                pass
 
     def file_save_as(self):
         pass
